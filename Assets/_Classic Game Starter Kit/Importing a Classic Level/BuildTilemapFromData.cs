@@ -47,7 +47,7 @@ public class BuildTilemapFromData : MonoBehaviour {
                 Debug.LogError( "Failed to parse num of: " + tempTiles[i].name );// d
             }
         }
-        Debug.Log( "Parsed " + VISUAL_TILES.Length + " tiles into TILES_VISUAL." );
+        Debug.Log( $"Parsed {VISUAL_TILES.Length} tiles from folder: {resourcesFolderHoldingTiles}." );
     }
 
     /// <summary>
@@ -57,6 +57,7 @@ public class BuildTilemapFromData : MonoBehaviour {
     void ShowTiles() {
         visualTileBaseArray = GetMapTiles();                                 // b
         tilemapToFill.SetTilesBlock( MapInfo.GET_MAP_BOUNDS(), visualTileBaseArray );
+        Debug.Log( $"Generated Tilemap from data to Tilemap named: {tilemapToFill.name}." );
     }
 
     /// <summary>
