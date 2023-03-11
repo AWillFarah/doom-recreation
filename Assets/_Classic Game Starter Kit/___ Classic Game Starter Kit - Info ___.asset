@@ -17,17 +17,13 @@ MonoBehaviour:
   title: "<b>Classic Game Starter Kit</b>\nMI 231 \u2013\_Game and Interactive Media
     Dev\n\u2013 games.MSU.edu \u2013"
   sections:
-  - heading: This is all built on code from the Dungeon Delver project in my book.
-    text: 
-    linkText: '   For more info on the book, see http://book.prototools.net'
-    url: http://book.prototools.net
   - heading: <b>Instructions Document</b>
     text: You can find a link to detailed instructions for using this starter kit
       at the following Google Doc. You cannot edit the document, but you can make
       comments if you would like me to clarify anything or add any information.
     linkText: '   <b>Link to Instructions Google Doc</b>'
     url: https://docs.google.com/document/d/1MME9SmiOWbESyZiEHRC7WudysBDrGfxm5lMhPg_3e0o/edit?usp=sharing
-  - heading: Contents of this Starter Kit
+  - heading: <b>Contents of this Starter Kit</b>
     text: "Most things can be found in the <b><i>_Classic Game Starter Kit</i></b>
       folder.\n\u2022 <b>Importing a Classic Level</b> - Contains the tools for converting
       an image of a map from somewhere like spriters-resource.com into a working
@@ -44,6 +40,15 @@ MonoBehaviour:
       your own player character controller."
     linkText: '   More information is available in the Instructions Doc'
     url: https://docs.google.com/document/d/1MME9SmiOWbESyZiEHRC7WudysBDrGfxm5lMhPg_3e0o/edit?usp=sharing
+  - heading: Importing a Classic Level Tilemap Code
+    text: This is mostly built on code from the Dungeon Delver project in my book.
+    linkText: '   For more info on the book, see <b>http://book.prototools.net</b>'
+    url: http://book.prototools.net
+  - heading: Character Controller Code
+    text: The character platformer code is a modified version of the GMTK Platformer
+      Toolkit.
+    linkText: '   For more info, watch this GMTK video'
+    url: https://www.youtube.com/watch?v=zWi0jgghGcI
   - heading: NaughtyAttributes - Unity Asset
     text: This project includes the <b>excellent</b> and <b>free</b> NaughtyAttributes
       asset from the Unity Asset Store. NaughtyAttributes was created by Denis Rizov

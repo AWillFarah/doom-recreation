@@ -7,16 +7,16 @@ using UnityEditor;
 
 // Needs the Serializable attribute otherwise the CustomPropertyDrawer wont be used
 [System.Serializable]
-public class InfoInspectorDrawer {
+public class InfoProperty {
     //public bool showDefaultInspector = true;
-    public string title = "InfoInspectorDrawer Title";
+    public string title = "InfoProperty Title";
     [TextArea(1, 10)]
     public string text = "Set the Inspector to <b>Debug mode</b> \\n to edit this text.";
     public bool showAsFoldout = true;
     public bool foldoutOpenByDefault = false;
     
-    public InfoInspectorDrawer() { }
-    public InfoInspectorDrawer(string _title="", string _text="", bool _showAsFoldout=true, bool _foldoutOpenByDefault=false) {
+    public InfoProperty() { }
+    public InfoProperty(string _title="", string _text="", bool _showAsFoldout=true, bool _foldoutOpenByDefault=false) {
         if (_title != "") title = _title;
         if (_text != "") text = _text;
         showAsFoldout = _showAsFoldout;
@@ -32,8 +32,8 @@ public class InfoInspectorDrawer {
         return num;
     }
 
-    // public static explicit operator InfoInspectorDrawer(SerializedProperty sp) {
-    //     InfoInspectorDrawer info = new InfoInspectorDrawer();
+    // public static explicit operator InfoProperty(SerializedProperty sp) {
+    //     InfoProperty info = new InfoProperty();
     //     //info.icon = sp.FindPropertyRelative("icon").val
     //     //info.showDefaultInspector = sp.FindPropertyRelative("showDefaultInspector").boolValue;
     //     info.title = sp.FindPropertyRelative("title").stringValue;
@@ -46,12 +46,12 @@ public class InfoInspectorDrawer {
 
 
 #if UNITY_EDITOR
-[CustomPropertyDrawer(typeof(InfoInspectorDrawer))]
+[CustomPropertyDrawer(typeof(InfoProperty))]
 public class InspectorInfoDrawer : PropertyDrawer {
     private float totalPropertyHeight = EditorGUIUtility.singleLineHeight;
     private bool  foldoutOpen;
     // bool                  showFoldout;
-    // private InfoInspectorDrawer info;
+    // private InfoProperty info;
     
     
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
@@ -62,7 +62,7 @@ public class InspectorInfoDrawer : PropertyDrawer {
         totalPropertyHeight = 0;
         
         if (!m_Initialized) Init( property.FindPropertyRelative( "foldoutOpenByDefault" ).boolValue );
-        // info = (InfoInspectorDrawer) property;
+        // info = (InfoProperty) property;
         
         //if (info.showDefaultInspector) {
         //    //base.OnGUI(position, property, label);
@@ -211,9 +211,9 @@ public class ScaledCurveDrawer : PropertyDrawer
 
 /*
 // _____________________ Everything in comments under here is largely broken, but I wanted it in case I tried this craziness again - JGB 2022-10-04
-[CustomPropertyDrawer(typeof(InfoInspectorDrawer))]
+[CustomPropertyDrawer(typeof(InfoProperty))]
 public class InspectorInfoDrawer : PropertyDrawer {
-    private InfoInspectorDrawer info;
+    private InfoProperty info;
     float propertyHeight = EditorGUIUtility.singleLineHeight;
 
     //public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
@@ -222,7 +222,7 @@ public class InspectorInfoDrawer : PropertyDrawer {
     //}
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
         if (info == null) {
-            info = (InfoInspectorDrawer)property;
+            info = (InfoProperty)property;
             Init();
         }
 
@@ -234,7 +234,7 @@ public class InspectorInfoDrawer : PropertyDrawer {
         totalHeight += info.CountLines() * m_BodyStyle.lineHeight;
 
 
-        ////SerializedObject childObj = new UnityEditor.SerializedObject(property.objectReferenceValue as InfoInspectorDrawer);
+        ////SerializedObject childObj = new UnityEditor.SerializedObject(property.objectReferenceValue as InfoProperty);
         ////SerializedProperty ite = childObj.GetIterator();
         //var enumerator = property.GetEnumerator();
         //float totalHeight = EditorGUI.GetPropertyHeight(property, label, true) + EditorGUIUtility.standardVerticalSpacing;
@@ -250,7 +250,7 @@ public class InspectorInfoDrawer : PropertyDrawer {
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
         if (info == null) {
-            info = (InfoInspectorDrawer)property;
+            info = (InfoProperty)property;
             Init();
         }
 

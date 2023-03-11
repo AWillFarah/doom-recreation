@@ -24,7 +24,10 @@ public class InfoComponent : MonoBehaviour {
 [CustomEditor(typeof(InfoComponent))]
 //[CanEditMultipleObjects]
 public class InfoComponentEditor : Editor {
-	static bool TURN_ON_DEFAULT_INSPECTORS = false;
+	static private bool TURN_ON_DEFAULT_INSPECTORS = false;
+
+	private const int delayGUIStart = 2;
+	private int delayGUI = 0;
 
 	//static float kSpace = 16f;
 	InfoComponent info;
@@ -48,6 +51,7 @@ public class InfoComponentEditor : Editor {
 
 
 	void OnEnable() {
+		delayGUI = delayGUIStart;
 		info = (InfoComponent)target;
 		Init();
 	}
@@ -66,6 +70,11 @@ public class InfoComponentEditor : Editor {
 		if (info == null) {
 			info = (InfoComponent)target;
 			Init();
+		}
+		if ( !m_Initialized ) return;
+		if ( delayGUI > 0 ) {
+			delayGUI--;
+			return;
 		}
 
 		if (TURN_ON_DEFAULT_INSPECTORS) {
@@ -154,8 +163,16 @@ public class InfoComponentEditor : Editor {
 
 	void Init() {
 		if (m_Initialized) return;
-
-		m_BodyStyle = new GUIStyle(EditorStyles.label);
+		
+		// This is causing issues because EditorStyles.label uses EditorStyles.s_Current,
+		//  which could be null during a recompile if EditorStyles has not yet inited properly
+		try {
+			m_BodyStyle = new GUIStyle( EditorStyles.label );
+		}
+		catch {
+			return;
+		}
+		
 		m_BodyStyle.wordWrap = true;
 		m_BodyStyle.fontSize = 14;
 		m_BodyStyle.richText = true;

@@ -158,7 +158,9 @@ public class ButtonState_Drawer : PropertyDrawer {
         EditorGUI.indentLevel = indent;
 
         EditorGUI.EndProperty();
-        EditorUtility.SetDirty( property.serializedObject.targetObject ); // Repaint
+        if ( Application.isPlaying ) {
+            EditorUtility.SetDirty( property.serializedObject.targetObject ); // Repaint
+        }
     }
 }
 #endif

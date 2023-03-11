@@ -12,7 +12,7 @@ using System.Reflection;
 [CustomEditor( typeof( ProjectInfo_SO ) )]
 [InitializeOnLoad]
 public class ProjectInfoEditor : Editor {
-	const string ProjectMenuHeader = "3PLE";
+	const string ProjectMenuHeader = "Help";
 
 	static string kShowedProjectInfoSessionStateName = "ProjectInfoEditor.showedProjectInfo";
 
@@ -41,7 +41,7 @@ public class ProjectInfoEditor : Editor {
 	// 	method.Invoke( null, new object[] { Path.Combine( Application.dataPath, "TutorialInfo/Layout.wlt" ), false } );
 	// }
 
-	[MenuItem( ProjectMenuHeader+"/Show Project Instructions", false, 1 )]
+	[MenuItem( ProjectMenuHeader+"/——— Show Project Info ———", false, 1 )]
 	static ProjectInfo_SO SelectProjectInfo() {
 		var ids = AssetDatabase.FindAssets( "t:ProjectInfo_SO" );
 		if ( ids.Length == 1 ) {
@@ -97,7 +97,6 @@ public class ProjectInfoEditor : Editor {
 		bool altHeld = ( Event.current.modifiers == EventModifiers.Alt );
 		if ( pInfo.showDefaultInspector || altHeld ) {
 			pInfo.showDefaultInspector = EditorGUILayout.ToggleLeft( "Show Default Inspector…", pInfo.showDefaultInspector );
-            
 		}
 
 		if ( pInfo.sections != null ) {
