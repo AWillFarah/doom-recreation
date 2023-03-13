@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NaughtyAttributes;
+using UnityEngine.Timeline;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,42 +12,69 @@ using UnityEditor;
 /// Created by Jeremy Bond for MI 231 at Michigan State University
 /// Built to work with a modified version of the GMTK Platformer Toolkit
 /// </summary>
-[CreateAssetMenu( fileName = "GMTK_Settings_[GameName]", menuName = "ScriptableObjects/GMTK_Settings", order = 1 )]
+[CreateAssetMenu( fileName = "GMTK_Settings_[GameName]",
+    menuName = "ScriptableObjects/GMTK_Settings", order = 1 )]
 public class Character_Settings_SO : ScriptableObject {
+    static bool DEBUG_JUMP_LINE_CALCULATION = false;
 
     [Header( "Movement Stats" )]
-    [SerializeField, Range( 0f, 20f )] [Tooltip( "Maximum movement speed" )] public float maxSpeed = 10f;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to reach max speed" )] public float maxAcceleration = 52f;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to stop after letting go" )] public float maxDeceleration = 52f;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to stop when changing direction" )] public float maxTurnSpeed = 80f;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to reach max speed when in mid-air" )] public float maxAirAcceleration = 0;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to stop in mid-air when no direction is used" )] public float maxAirDeceleration = 0;
-    [SerializeField, Range( 0f, 100f )] [Tooltip( "How fast to stop when changing direction when in mid-air" )] public float maxAirTurnSpeed = 80f;
-    [SerializeField] [Tooltip( "Friction to apply against movement on stick" )] public float friction = 0;
+    [SerializeField, Range( 0f, 20f )]
+    [Tooltip( "Maximum movement speed" )]
+    public float maxSpeed = 10f;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to reach max speed" )]
+    public float maxAcceleration = 52f;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to stop after letting go" )]
+    public float maxDeceleration = 52f;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to stop when changing direction" )]
+    public float maxTurnSpeed = 80f;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to reach max speed when in mid-air" )]
+    public float maxAirAcceleration = 0;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to stop in mid-air when no direction is used" )]
+    public float maxAirDeceleration = 0;
+    [SerializeField, Range( 0f, 100f )]
+    [Tooltip( "How fast to stop when changing direction when in mid-air" )]
+    public float maxAirTurnSpeed = 80f;
+    [SerializeField]
+    [Tooltip( "Friction to apply against movement on stick" )]
+    public float friction = 0;
 
     [Header( "Movement Options" )]
-    [Tooltip( "When false, the charcter will skip acceleration and deceleration and instantly move and stop" )] public bool useAcceleration = true;
+    [Tooltip(
+        "When false, the charcter will skip acceleration and deceleration and instantly move and stop" )]
+    public bool useAcceleration = true;
 
 
 
     // NOTE: CGSK jummp math comes from Math for Game Programmers: Building a Better Jump
     // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=9m35s & https://www.youtube.com/watch?v=hG9SzQxaCm8&t=784s
     // Th = Xh/Vx     V0 = 2H / Th     G = -2H / (Th * Th)     V0 = 2HVx / Xh     G = -2H(Vx*Vx) / (Xh*Xh) 
-    
+
     [Header( "Jump Settings" )]
     public eJumpSettingsType jumpSettingsType = eJumpSettingsType.CGSK_Time;
     public enum eJumpSettingsType { CGSK_Distance, CGSK_Time, GMTK_GameMakersToolKit };
 
     public bool showJumpLine = true;
-    
-    [Tooltip( "Maximum jump height" )]
-    [Range( 1f, 10f )] public float jumpHeight = 4f;
 
-    [ShowIf("jumpSettingsType", eJumpSettingsType.CGSK_Time)]
+    [Tooltip( "Maximum jump height" )]
+    [Range( 1f, 10f )]
+    public float jumpHeight = 4f;
+
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Time )]
     public CGSK_JumpSettings_Time jumpSettingsTime;
-    
-    [ShowIf("jumpSettingsType", eJumpSettingsType.CGSK_Distance)]
+
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Distance )]
     public CGSK_JumpSettings_Distance jumpSettingsDistance;
+
+    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    public CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeightCGSK;
+    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    public CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeightGMTK;
+    [HideInInspector] internal CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeight;
 
     // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
     // [XnTools.ReadOnly][BoxGroup("CGSK Derived Jump Properties")]
@@ -54,58 +82,80 @@ public class Character_Settings_SO : ScriptableObject {
 
 
     [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
-    [BoxGroup( "CGSK Derived Jump Properties" )]
+    [BoxGroup( "Derived Jump Properties" )]
     public CSSO_FloatUpDown jumpDist, jumpDuration, jumpVel, jumpGrav;
+    [BoxGroup( "Derived Jump Properties" )] [SerializeField] [XnTools.ReadOnly]
+    internal Vector2 maxJumpDistHeight, minJumpDistHeight;
 
 
-    
-    
-    
-    [Header("Jump Settings - GameMakers ToolKit")]
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [SerializeField, Range( 1f, 10f )] [Tooltip( "How long it takes to reach that height before coming back down" )]
-    public float jumpDurationFromVideo = 5;
-    //If you're using your stats from Platformer Toolkit with this character controller,
-    // please note that the number on the Jump Duration handle does not match this stat
-    // It is re-scaled, from 0.2f - 1.25f, to 1 - 10.
-    [XnTools.ReadOnly]
-    [SerializeField, Range( 0.1f, 1.25f )][ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [Tooltip( "For some reason, the GMTK version of the value in the video is different from the one here, so I calculate this from the other value." )]
-    public float timeToJumpApex;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [SerializeField, Range( 0f, 5f )] [Tooltip( "Gravity multiplier to apply when going up" )] public float upwardMovementMultiplier = 1f;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [SerializeField, Range( 1f, 10f )] [Tooltip( "Gravity multiplier to apply when coming down" )] public float downwardMovementMultiplier = 6.17f;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [SerializeField, Range( 0, 1 )] [Tooltip( "How many times can you jump in the air?" )] public int maxAirJumps = 0;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [Tooltip( "Should the character drop when you let go of jump?" )] public bool variablejumpHeight;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit)]
-    [SerializeField, Range( 1f, 10f )] [Tooltip( "Gravity multiplier when you let go of jump" )] public float jumpCutOff;
-    
+
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    public GMTK_JumpSettings jumpSettingsGMTK;
+
+
     [Header( "Jump Options" )]
-    [SerializeField] [Tooltip( "The fastest speed the character can fall" )] public float speedLimit = 26.45f;
-    [SerializeField, Range( 0f, 0.3f )] [Tooltip( "How long should coyote time last?" )] public float coyoteTime = 0.15f;
-    [SerializeField, Range( 0f, 0.3f )] [Tooltip( "How far from ground should we cache your jump?" )] public float jumpBuffer = 0.15f;
+    [SerializeField]
+    [Tooltip( "The fastest speed the character can fall" )]
+    public float speedLimit = 26.45f;
+    [SerializeField, Range( 0f, 0.3f )]
+    [Tooltip( "How long should coyote time last?" )]
+    public float coyoteTime = 0.15f;
+    [SerializeField, Range( 0f, 0.3f )]
+    [Tooltip( "How far from ground should we cache your jump?" )]
+    public float jumpBuffer = 0.15f;
+    [Tooltip( "Max jumps between grounding. (2 for Double Jump, 3 for Triple Jump, etc.) " )]
+    [Range( 1, 10 )]
+    public int jumpsBetweenGrounding = 1;
 
 
 
 
 
     [Header( "Juice Settings - Squash and Stretch" )]
-    [SerializeField] public bool squashAndStretch;
-    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )] public Vector3 jumpSquashSettings;
-    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )] public Vector3 landSquashSettings;
-    [SerializeField, Tooltip( "How powerful should the effect be?" )] public float landSqueezeMultiplier;
-    [SerializeField, Tooltip( "How powerful should the effect be?" )] public float jumpSqueezeMultiplier;
-    [SerializeField] public float landDrop = 1;
+    [SerializeField]
+    public bool squashAndStretch;
+    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
+    public Vector3 jumpSquashSettings;
+    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
+    public Vector3 landSquashSettings;
+    [SerializeField, Tooltip( "How powerful should the effect be?" )]
+    public float landSqueezeMultiplier;
+    [SerializeField, Tooltip( "How powerful should the effect be?" )]
+    public float jumpSqueezeMultiplier;
+    [SerializeField]
+    public float landDrop = 1;
 
     [Header( "Juice Settings - Tilting" )]
 
-    [SerializeField] public bool leanForward;
-    [SerializeField, Tooltip( "How far should the character tilt?" )] public float maxTilt;
-    [SerializeField, Tooltip( "How fast should the character tilt?" )] public float tiltSpeed;
+    [SerializeField]
+    public bool leanForward;
+    [SerializeField, Tooltip( "How far should the character tilt?" )]
+    public float maxTilt;
+    [SerializeField, Tooltip( "How fast should the character tilt?" )]
+    public float tiltSpeed;
 
+
+
+    // public float timeToJumpApex;
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [SerializeField, Range( 0f, 5f )]
+    // [Tooltip( "Gravity multiplier to apply when going up" )]
+    // public float upwardMovementMultiplier = 1f;
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [SerializeField, Range( 1f, 10f )]
+    // [Tooltip( "Gravity multiplier to apply when coming down" )]
+    // public float downwardMovementMultiplier = 6.17f;
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [SerializeField, Range( 0, 1 )]
+    // [Tooltip( "How many times can you jump in the air?" )]
+    // public int maxAirJumps = 0;
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [Tooltip( "Should the character drop when you let go of jump?" )]
+    // public bool variableJumpHeight;
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [SerializeField, Range( 1f, 10f )]
+    // [Tooltip( "Gravity multiplier when you let go of jump" )]
+    // public float jumpCutOff;
 
 
 
@@ -113,28 +163,29 @@ public class Character_Settings_SO : ScriptableObject {
     private void OnValidate() {
         switch ( jumpSettingsType ) {
         case eJumpSettingsType.CGSK_Time:
-            CalculateDerivedCGSKJumpValues_Time();
+            CalculateDerivedJumpValues_Time();
             break;
-        
+
         case eJumpSettingsType.CGSK_Distance:
-            CalculateDerivedCGSKJumpValues_Distance();
+            CalculateDerivedJumpValues_Distance();
             break;
-        
+
         case eJumpSettingsType.GMTK_GameMakersToolKit:
-            timeToJumpApex = scale( 1, 10, 0.2f, 1.25f, jumpDurationFromVideo );
+            CalculateDerivedJumpValues_GMTK();
             break;
         }
-        
+
         CalculateJumpLine();
     }
 
-    
+
     static private int       jumpLineResolution = 64; // NOTE: This must be a positive even number
     internal       Vector3[] jumpLinePoints;
-    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
-    [BoxGroup( "CGSK Derived Jump Properties" )][SerializeField][XnTools.ReadOnly]
-    internal       Vector2   maxJumpDistHeight;
-    internal       Vector3[] jumpStartMidEndPoints;
+    internal List<Vector3> minJumpLinePoints;
+    // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    internal Vector3[] jumpStartMidEndPoints, minJumpStartMidEndPoints;
+    internal Vector2   minTimeApexFull;
+
     internal void CalculateJumpLine() {
         if ( jumpSettingsType == eJumpSettingsType.GMTK_GameMakersToolKit ) {
             jumpLinePoints = null;
@@ -142,6 +193,7 @@ public class Character_Settings_SO : ScriptableObject {
         }
         maxJumpDistHeight = Vector2.zero;
         Vector3 acc = new Vector3( 0, jumpGrav.up, 0 );
+        Vector3 newAcc = acc;
         Vector3 p = Vector3.zero;
         jumpLinePoints = new Vector3[jumpLineResolution];
         jumpStartMidEndPoints = new Vector3[3];
@@ -150,10 +202,10 @@ public class Character_Settings_SO : ScriptableObject {
         Vector3 v = new Vector3( maxSpeed, jumpVel.up, 0 );
         int numSteps = jumpLineResolution / 2;
         // Jumping Up
-        float timeStep = jumpDuration.up  / (float) numSteps;
+        float timeStepUp = jumpDuration.up / (float) numSteps;
         int i = 1;
         for ( ; i <= jumpLineResolution / 2; i++ ) {
-            SimplifiedVelocityVerletIntegration(ref p, ref v, acc, timeStep);
+            SimplifiedVelocityVerletIntegration( ref p, ref v, acc, timeStepUp );
             // p.x += v.x         * timeStep;
             // v.y += jumpGrav.up * timeStep;
             // p.y += v.y         * timeStep;
@@ -163,9 +215,9 @@ public class Character_Settings_SO : ScriptableObject {
         maxJumpDistHeight.y = p.y;
         // Jumping Down
         acc.y = jumpGrav.down;
-        timeStep = jumpDuration.down / (float) (numSteps-1);
+        float timeStepDown = jumpDuration.down / (float) ( numSteps - 1 );
         for ( ; i < jumpLineResolution; i++ ) {
-            SimplifiedVelocityVerletIntegration(ref p, ref v, acc, timeStep);
+            SimplifiedVelocityVerletIntegration( ref p, ref v, acc, timeStepDown );
             // p.x += v.x           * timeStep;
             // v.y += jumpGrav.down * timeStep;
             // p.y += v.y           * timeStep;
@@ -173,13 +225,91 @@ public class Character_Settings_SO : ScriptableObject {
         }
         jumpStartMidEndPoints[2] = p;
         maxJumpDistHeight.x = p.x;
+
+        // Calculate jump line if jump button is released immediately
+        if ( !jumpSettingsVariableHeight.useVariableJumpHeight ) {
+            minJumpLinePoints = null;
+            return;
+        }
+        minJumpDistHeight = Vector2.zero;
+        minTimeApexFull = Vector2.zero;
+        v = new Vector3( maxSpeed, jumpVel.up, 0 );
+        newAcc = acc = new Vector3( 0, jumpGrav.up, 0 );
+        p = Vector3.zero;
+        minJumpLinePoints = new List<Vector3>();
+        minJumpStartMidEndPoints = new Vector3[3];
+        minJumpLinePoints.Add( p );
+        minJumpStartMidEndPoints[0] = p;
+        // We'll use timeStepUp, the timeStep from jumpDuration.up
+        i = 0;
+        float time = 0;
+        int minJumpPhase = 0; // 0=up and button held, 1=button released, 2=down 
+        Vector3 debugAcc = new Vector3(acc.y, -1, -1);
+        float minTimeStep = 0.01f;
+        for ( ; time < 10; i++ ) { // time<10 or i<jumpLineResolution to keep it from getting out of hand
+            time += minTimeStep;
+            if ( minJumpPhase == 0 ) { // Up and button held
+                if ( v.y <= 0 || time >= jumpSettingsVariableHeight.minJumpButtonHeldTime ) {
+                    if ( v.y <= 0 || jumpSettingsVariableHeight.upwardVelocityZeroing ) {
+                        v.y = 0;
+                        newAcc.y = jumpGrav.down;
+                        debugAcc.z = newAcc.y;
+                        minJumpStartMidEndPoints[1] = p;
+                        minJumpPhase = 2;
+                        minTimeApexFull.x = time;
+                    } else {
+                        newAcc.y = jumpGrav.up * jumpSettingsVariableHeight.gravUpMultiplierOnRelease;
+                        debugAcc.y = newAcc.y;
+                        minJumpPhase = 1;
+                    }
+                }
+            } else if ( minJumpPhase == 1 ) { // Still up, but button has been released
+                if ( v.y <= 0 ) { // We're starting down
+                    newAcc.y = jumpGrav.down;
+                    debugAcc.z = newAcc.y;
+                    minJumpStartMidEndPoints[1] = p;
+                    minJumpDistHeight.y = p.y;
+                    minJumpPhase = 2;
+                    minTimeApexFull.x = time;
+                }
+            } else { // minJumpPhase == 2 // Moving down
+                if ( p.y < 0 ) break; // This shouldn't ever happen because it should be caught after last SVVI call in minJumpPhase 2
+            }
+            
+            VelocityVerletIntegration( ref p, ref v, ref acc, newAcc, minTimeStep );
+            if ( p.y < 0 ) {
+                p.y = 0; // This is a fudging of the numbers, but it should be ok. - JGB 2023-03-12
+                minJumpStartMidEndPoints[2] = p;
+                minJumpLinePoints.Add( p );
+                minJumpDistHeight.x = p.x;
+                minTimeApexFull.y = time;
+                break;
+            }
+            minJumpLinePoints.Add( p );
+        }
+        if (DEBUG_JUMP_LINE_CALCULATION) Debug.LogWarning(
+            $"gUMOR: {jumpSettingsVariableHeight.gravUpMultiplierOnRelease:0.##}"
+            + $"\tp0acc: {debugAcc.x:#,0.##}"
+            + $"\tp1acc: {debugAcc.y:#,0.##}"
+            + $"\tp2acc: {debugAcc.z:#,0.##}");
+
     }
-    
+
     // NOTE: Simplified Velocity Verlet Integration from Math for Game Programmers: Building a Better Jump
     // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=23m2s
-    void SimplifiedVelocityVerletIntegration( ref Vector3 pos, ref Vector3 vel, Vector3 acc, float deltaTime ) {
-        pos += vel * deltaTime + acc * ( 0.5f * deltaTime * deltaTime ); // pos += vel*dT + 1/2*acc*dT*dT
+    void SimplifiedVelocityVerletIntegration( ref Vector3 pos, ref Vector3 vel, Vector3 acc,
+                                              float deltaTime ) {
+        pos += vel * deltaTime +
+               acc * ( 0.5f * deltaTime * deltaTime ); // pos += vel*dT + 1/2*acc*dT*dT
         vel += acc * deltaTime;
+    }
+
+    void VelocityVerletIntegration( ref Vector3 pos, ref Vector3 vel, ref Vector3 acc,
+                                    Vector3 newAcc, float deltaTime ) {
+        pos += vel * deltaTime +
+               acc * ( 0.5f * deltaTime * deltaTime ); // pos += vel*dT + 1/2*acc*dT*dT
+        vel += (acc + newAcc) * (0.5f * deltaTime);
+        acc = newAcc;
     }
 
     public float scale( float OldMin, float OldMax, float NewMin, float NewMax, float OldValue ) {
@@ -193,40 +323,46 @@ public class Character_Settings_SO : ScriptableObject {
 
     [System.Serializable]
     public class CGSK_JumpSettings_Time {
-        [Header("Classic Game Starter Kit - Time Jump Settings")]
+        [Header( "Classic Game Starter Kit - Time Jump Settings" )]
         [Tooltip( "The full duration of the shortest jump possible (by tapping the button)" )]
         public float fullJumpDurationMin = 0.5f;
         [Tooltip( "The full duration of the longest jump possible (by holding the button)" )]
         public float fullJumpDurationMax = 1f;
-        [Tooltip("The fraction of the jump that is going up")]
-        [Range( 0.05f, 0.95f )] public float jumpApexFraction = 0.6f;
+        [Tooltip( "The fraction of the jump that is going up" )]
+        [Range( 0.05f, 0.95f )]
+        public float jumpApexFraction = 0.6f;
     }
-    
-    private void CalculateDerivedCGSKJumpValues_Time() {
+
+    private void CalculateDerivedJumpValues_Time() {
         jumpDuration.up = jumpSettingsTime.fullJumpDurationMax * jumpSettingsTime.jumpApexFraction;
         jumpDuration.down = jumpSettingsTime.fullJumpDurationMax - jumpDuration.up;
-        jumpVel.up = jumpHeight   * 2 / jumpDuration.up;
-        jumpVel.down = jumpHeight * 2 / jumpDuration.down; // This is the velocity when the character lands. - GB 2023-03-10
-        jumpGrav.up = -2 * jumpHeight / ( jumpDuration.up * jumpDuration.up );
-        jumpGrav.down = -2 * jumpHeight / ( jumpDuration.down * jumpDuration.down );
-        jumpDist.up = jumpDuration.up * maxSpeed;
+        jumpVel.up = jumpHeight * 2 / jumpDuration.up;
+        jumpVel.down =
+            jumpHeight * 2 /
+            jumpDuration.down; // This is the velocity when the character lands. - GB 2023-03-10
+        jumpGrav.up = -2   * jumpHeight   / ( jumpDuration.up   * jumpDuration.up );
+        jumpGrav.down = -2 * jumpHeight   / ( jumpDuration.down * jumpDuration.down );
+        jumpDist.up = jumpDuration.up     * maxSpeed;
         jumpDist.down = jumpDuration.down * maxSpeed;
+        
+        jumpSettingsVariableHeight = jumpSettingsVariableHeightCGSK;
     }
-    
+
     [System.Serializable]
     public class CGSK_JumpSettings_Distance {
-        [Header("Classic Game Starter Kit - Distance Jump Settings")]
+        [Header( "Classic Game Starter Kit - Distance Jump Settings" )]
         [Tooltip( "The horizontal distance at full run speed of the shortest jump possible (by tapping the button)" )]
         public float fullJumpDistanceMin = 0.5f;
         [Tooltip( "The horizontal distance at full run speed of the longest jump possible (by holding the button)" )]
         public float fullJumpDistanceMax = 1f;
-        [Tooltip("The fraction of the jump that is going up")]
-        [Range( 0.05f, 0.95f )] public float jumpApexFraction = 0.6f;
+        [Tooltip( "The fraction of the jump that is going up" )]
+        [Range( 0.05f, 0.95f )]
+        public float jumpApexFraction = 0.6f;
     }
-    
-    private void CalculateDerivedCGSKJumpValues_Distance() {
+
+    private void CalculateDerivedJumpValues_Distance() {
         jumpDist.up = jumpSettingsDistance.fullJumpDistanceMax *
-                       jumpSettingsDistance.jumpApexFraction;
+                      jumpSettingsDistance.jumpApexFraction;
         jumpDist.down = jumpSettingsDistance.fullJumpDistanceMax - jumpDist.up;
         // Th = Xh / Vh
         jumpDuration.up = jumpDist.up     / maxSpeed;
@@ -235,8 +371,80 @@ public class Character_Settings_SO : ScriptableObject {
         jumpVel.up = 2   * jumpHeight * maxSpeed / jumpDist.up;
         jumpVel.down = 2 * jumpHeight * maxSpeed / jumpDist.down;
         // G = -2h(Vx*Vx) / (Xh*Xh)
-        jumpGrav.up = -2   * jumpHeight * ( maxSpeed * maxSpeed ) / ( jumpDist.up   * jumpDist.up );
-        jumpGrav.down = -2 * jumpHeight * ( maxSpeed * maxSpeed ) / ( jumpDist.down * jumpDist.down );
+        jumpGrav.up = -2 * jumpHeight * ( maxSpeed * maxSpeed ) / ( jumpDist.up * jumpDist.up );
+        jumpGrav.down = -2 * jumpHeight * ( maxSpeed * maxSpeed ) /
+                        ( jumpDist.down * jumpDist.down );
+        
+        jumpSettingsVariableHeight = jumpSettingsVariableHeightCGSK;
+    }
+
+    [System.Serializable]
+    public class CGSK_JumpSettings_VariableHeight {
+        [Header( "Classic Game Starter Kit - Variable Jump Height" )]
+
+        [Tooltip("Should the character jump differently based on how long the jump button is held?")]
+        public bool useVariableJumpHeight = true;
+        [Tooltip( "Should upward velocity be set to 0 when the jump button is released? (Like in Metroid for NES)" )]
+        public bool upwardVelocityZeroing = false;
+        [Tooltip( "The minimum amount of time that the jump button will be forced to be held" +
+            " Set this to 0.1f if you want to ensure that the player can't release the button before 0.1 seconds have passed." +
+            " 0.05f is the default value because 100ms is a typical shortest time for a button to be held." )]
+        [Range( 0.05f, 2f )]
+        public float minJumpButtonHeldTime = 0.05f; // 100ms is a typical shortest time for a button to be held.;
+        [Tooltip( "The multiplier applied to jumpGrav.up to slow upward velocity faster after the jump button has been released." +
+                  "\nIf this is set to 1 and upwardVelocityZeroing=false, then it is the same as useVariableJumpHeight=false." +
+                  "\nIf this were extremely high, it would similar to upwardVelocityZeroing=true." )]
+        [Range(1,20)]
+        public float gravUpMultiplierOnRelease = 1;
+    }
+
+    // NOTE: CGSK jummp math comes from Math for Game Programmers: Building a Better Jump
+    // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=9m35s & https://www.youtube.com/watch?v=hG9SzQxaCm8&t=784s
+    // Th = Xh/Vx     V0 = 2H / Th     G = -2H / (Th * Th)     V0 = 2HVx / Xh     G = -2H(Vx*Vx) / (Xh*Xh) 
+    
+    [System.Serializable]
+    public class GMTK_JumpSettings {
+        [Header( "Jump Settings - GameMakers ToolKit" )]
+        [SerializeField, Range( 1f, 10f )]
+        [Tooltip( "This number is converted from the rather meaningless [1..10] to a time to jump apex of [0.2sec..1.25sec]" )]
+        public float jumpDuration = 5;
+        [SerializeField, Range( 1f, 10f )]
+        [Tooltip( "Gravity multiplier to apply when coming down" )]
+        public float downGravity = 6.17f;
+        public bool doubleJump = false;
+        [Tooltip( "Should the character drop when you let go of jump?" )]
+        public bool variableJumpHeight;
+        [SerializeField, Range( 1f, 10f )]
+        [ShowIf("useVariableJumpHeight")]
+        [Tooltip( "Gravity multiplier when you let go of jump and character is still moving up" )]
+        public float jumpCutOff;
+    }
+
+    void CalculateDerivedJumpValues_GMTK() {
+        // Jump Duration up is set by the [1..10] value from the GMTK app 
+        jumpDuration.up = scale( 1, 10, 0.2f, 1.25f, jumpSettingsGMTK.jumpDuration );
+        // These are the only derived values where the initial gravity is based on Physics2D.gravity - JGB 2023-03-12
+        jumpGrav.up = Physics2D.gravity.y;
+        // downGravity is a multiplier on the up gravity
+        jumpGrav.down = jumpGrav.up * jumpSettingsGMTK.downGravity;
+        // Calculate jumpDuration.down from G = -2H / (Th * Th), which solves for Th to Th = √(-2H / G)
+        jumpDuration.down = Mathf.Sqrt( -2 * jumpHeight / jumpGrav.down );
+        // Calculate jumpVel from V = 2H / Th
+        jumpVel.up = 2   * jumpHeight / jumpDuration.up;
+        jumpVel.down = 2 * jumpHeight / jumpDuration.down;
+        // Calculate jumpDist from Th = Xh/Vx which is Vx = Xh/Th
+        jumpDist.up = maxSpeed   / jumpDuration.up;
+        jumpDist.down = maxSpeed / jumpDuration.down;
+
+        // Set double jump
+        jumpsBetweenGrounding = jumpSettingsGMTK.doubleJump ? 2 : 1;
+
+        jumpSettingsVariableHeightGMTK.useVariableJumpHeight = jumpSettingsGMTK.variableJumpHeight;
+        jumpSettingsVariableHeightGMTK.gravUpMultiplierOnRelease = jumpSettingsGMTK.jumpCutOff;
+        jumpSettingsVariableHeightGMTK.upwardVelocityZeroing = false;
+        jumpSettingsVariableHeightGMTK.minJumpButtonHeldTime = 0.05f; // 100ms is a typical shortest time for a button to be held.
+        
+        jumpSettingsVariableHeight = jumpSettingsVariableHeightGMTK;
     }
 
 }

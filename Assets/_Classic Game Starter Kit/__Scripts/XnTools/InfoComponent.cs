@@ -25,9 +25,9 @@ public class InfoComponent : MonoBehaviour {
 //[CanEditMultipleObjects]
 public class InfoComponentEditor : Editor {
 	static private bool TURN_ON_DEFAULT_INSPECTORS = false;
+	static private bool DEBUG_GUI_ERRORS           = false;
 
-	private const int delayGUIStart = 2;
-	private int delayGUI = 0;
+	private double failedGUITimeStamp = -1f;
 
 	//static float kSpace = 16f;
 	InfoComponent info;
@@ -51,7 +51,6 @@ public class InfoComponentEditor : Editor {
 
 
 	void OnEnable() {
-		delayGUI = delayGUIStart;
 		info = (InfoComponent)target;
 		Init();
 	}
@@ -67,13 +66,15 @@ public class InfoComponentEditor : Editor {
 	}
 
 	public override void OnInspectorGUI() {
+		if ( failedGUITimeStamp == EditorApplication.timeSinceStartup ) return;
 		if (info == null) {
 			info = (InfoComponent)target;
 			Init();
 		}
-		if ( !m_Initialized ) return;
-		if ( delayGUI > 0 ) {
-			delayGUI--;
+		if ( !m_Initialized ) {
+			failedGUITimeStamp = EditorApplication.timeSinceStartup;
+			if ( DEBUG_GUI_ERRORS )
+				Debug.LogWarning( $"InfoComponent Init() failed but it didn't cause an error message!)" ); //at {failedGUITimeStamp:#,0.###}.");
 			return;
 		}
 

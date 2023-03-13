@@ -32,6 +32,16 @@ MonoBehaviour:
     fullJumpDistanceMin: 0.5
     fullJumpDistanceMax: 5.5
     jumpApexFraction: 0.6
+  jumpSettingsVariableHeightCGSK:
+    useVariableJumpHeight: 1
+    upwardVelocityZeroing: 0
+    minJumpButtonHeldTime: 0.05
+    gravUpMultiplierOnRelease: 2.54
+  jumpSettingsVariableHeightGMTK:
+    useVariableJumpHeight: 1
+    upwardVelocityZeroing: 0
+    minJumpButtonHeldTime: 0.05
+    gravUpMultiplierOnRelease: 1
   jumpDist:
     up: 3.3000002
     down: 2.1999998
@@ -44,16 +54,18 @@ MonoBehaviour:
   jumpGrav:
     up: -22.22222
     down: -50.000008
-  jumpDurationFromVideo: 5
-  timeToJumpApex: 0.6666666
-  upwardMovementMultiplier: 1
-  downwardMovementMultiplier: 1.4
-  maxAirJumps: 0
-  variablejumpHeight: 1
-  jumpCutOff: 2.5
+  maxJumpDistHeight: {x: 5.499999, y: 4}
+  minJumpDistHeight: {x: 3.0800004, y: 1.9994661}
+  jumpSettingsGMTK:
+    jumpDuration: 5
+    downGravity: 6.17
+    doubleJump: 0
+    variableJumpHeight: 0
+    jumpCutOff: 0
   speedLimit: 26.45
   coyoteTime: 0.15
   jumpBuffer: 0.15
+  jumpsBetweenGrounding: 1
   squashAndStretch: 0
   jumpSquashSettings: {x: 0, y: 0, z: 0}
   landSquashSettings: {x: 0, y: 0, z: 0}
@@ -63,4 +75,3 @@ MonoBehaviour:
   leanForward: 0
   maxTilt: 0
   tiltSpeed: 0
-  maxJumpDistHeight: {x: 5.499999, y: 4}

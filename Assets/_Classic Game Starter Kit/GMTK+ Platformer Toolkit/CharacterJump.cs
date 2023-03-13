@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +11,8 @@ using UnityEditor;
 [RequireComponent(typeof(CharacterGround))]
 public class CharacterJump : MonoBehaviour
 {
-    [Header("Components")]
+    // [Header("Components")]
+    [InfoBox("If you want to see a prediction of the jump when this GameObject is selected, check showJumpLine in the Character_Settings_SO that you're using.", EInfoBoxType.Normal)]
     [XnTools.Hidden] public Rigidbody2D rigid;
     [XnTools.Hidden] public Vector2 velocity;
 
@@ -33,7 +35,7 @@ public class CharacterJump : MonoBehaviour
 //    [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
 
 //    [Header("Options")]
-//    [Tooltip("Should the character drop when you let go of jump?")] public bool variablejumpHeight;
+//    [Tooltip("Should the character drop when you let go of jump?")] public bool variableJumpHeight;
 //    [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier when you let go of jump")] public float jumpCutOff;
 //    [SerializeField][Tooltip("The fastest speed the character can fall")] public float speedLimit;
 //    [SerializeField, Range(0f, 0.3f)][Tooltip("How long should coyote time last?")] public float coyoteTime = 0.15f;
@@ -82,7 +84,7 @@ public class CharacterJump : MonoBehaviour
 
     private void SetPhysics() {
         //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
-        Vector2 newGravity = new Vector2( 0, ( -2 * characterSettingsSO.jumpHeight ) / ( characterSettingsSO.timeToJumpApex * characterSettingsSO.timeToJumpApex ) );
+        Vector2 newGravity = new Vector2( 0, ( -2 * characterSettingsSO.jumpHeight ) / ( characterSettingsSO.jumpDuration.up * characterSettingsSO.jumpDuration.up ) );
         rigid.gravityScale = ( newGravity.y / Physics2D.gravity.y ) * gravMultiplier;
     }
 
@@ -165,22 +167,20 @@ public class CharacterJump : MonoBehaviour
             else
             {
                 //If we're using variable jump height...)
-                if ( characterSettingsSO.variablejumpHeight )
+                if ( characterSettingsSO.jumpSettingsVariableHeight.useVariableJumpHeight )
                 {
                     //Apply upward multiplier if player is rising and holding jump
-                    if (pressingJump && currentlyJumping)
-                    {
-                        gravMultiplier = characterSettingsSO.upwardMovementMultiplier;
+                    if (pressingJump && currentlyJumping) {
+                        gravMultiplier = characterSettingsSO.jumpGrav.up;// characterSettingsSO.upwardMovementMultiplier;
                     }
                     //But apply a special downward multiplier if the player lets go of jump
-                    else
-                    {
-                        gravMultiplier = characterSettingsSO.jumpCutOff;
+                    else {
+                        gravMultiplier = characterSettingsSO.jumpGrav.up * characterSettingsSO.jumpSettingsVariableHeight.gravUpMultiplierOnRelease;// characterSettingsSO.jumpCutOff;
                     }
                 }
                 else
                 {
-                    gravMultiplier = characterSettingsSO.upwardMovementMultiplier;
+                    gravMultiplier = characterSettingsSO.jumpGrav.up;// characterSettingsSO.upwardMovementMultiplier;
                 }
             }
         }
@@ -197,7 +197,7 @@ public class CharacterJump : MonoBehaviour
             else
             {
                 //Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
-                gravMultiplier = characterSettingsSO.downwardMovementMultiplier;
+                gravMultiplier = characterSettingsSO.jumpGrav.down; //characterSettingsSO.downwardMovementMultiplier;
             }
 
         }
@@ -233,8 +233,9 @@ public class CharacterJump : MonoBehaviour
             SetPhysics();
 
             //If we have double jump on, allow us to jump again (but only once)
-            canJumpAgain = ( characterSettingsSO.maxAirJumps == 1 && canJumpAgain == false);
-
+            // canJumpAgain = ( characterSettingsSO.maxAirJumps == 1 && canJumpAgain == false);
+            canJumpAgain = ( characterSettingsSO.jumpsBetweenGrounding > 1 && canJumpAgain == false);
+            
             //Determine the power of the jump, based on our gravity and stats
             jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * rigid.gravityScale * characterSettingsSO.jumpHeight );
             if (jumpSpeed > 100) {
@@ -308,22 +309,39 @@ timeToApexStat = scale(1, 10, 0.2f, 2.5f, numberFromPlatformerToolkit)
             if ( !csso.showJumpLine ) return;
             if ( csso.jumpSettingsType == Character_Settings_SO.eJumpSettingsType.GMTK_GameMakersToolKit ) return;
             if (csso.jumpLinePoints == null) cMove.characterSettingsSO.CalculateJumpLine();
+
+            GUIStyle labelStyle = new GUIStyle( EditorStyles.foldoutHeader );
+            labelStyle.imagePosition = ImagePosition.TextOnly; // NOTE: This didn't seem to do anything.
+            labelStyle.richText = true;
             
-            Handles.matrix = Matrix4x4.Translate(cJump.transform.position); // Not needed because jump will be shown at origin.
+            Handles.matrix = Matrix4x4.Translate(cJump.transform.position);
             Handles.color = Color.green;
             Handles.DrawAAPolyLine(4, csso.jumpLinePoints);
+            Vector3 tVec;
             Vector3[] jSME = csso.jumpStartMidEndPoints;
             if ( jSME != null && jSME.Length == 3 ) {
                 Vector3 offset = Vector3.up * 0.2f;
                 Handles.DrawDottedLine( jSME[0] + offset, jSME[2] + offset, dashSize );
-                Vector3 tVec = ( jSME[0] + jSME[2] ) / 2f + offset * 4 + Vector3.left * 0.4f;
-                Handles.Label( tVec, $"Dist: {csso.maxJumpDistHeight.x:0.##}" );
+                tVec = ( jSME[0] + jSME[2] ) / 2f + offset * 4 + Vector3.left * 0.4f;
+                Handles.Label( tVec, $"<b>Dist: {csso.maxJumpDistHeight.x:0.##}</b>", labelStyle );
                 tVec = jSME[1];
                 tVec.y = 0;
                 Handles.DrawDottedLine( tVec, jSME[1], dashSize );
                 tVec = ( tVec + jSME[1] ) / 2f + Vector3.left * 0.4f;
-                Handles.Label( tVec, $"Height: {csso.maxJumpDistHeight.y:0.##}" );
+                Handles.Label( tVec, $"<b>Height: {csso.maxJumpDistHeight.y:0.##}</b>", labelStyle );
             }
+
+            if ( csso.jumpSettingsVariableHeight.useVariableJumpHeight ) {
+                Handles.color = Color.magenta;
+                Handles.DrawAAPolyLine( 8, csso.minJumpLinePoints.ToArray() );
+                if ( csso.minJumpStartMidEndPoints        != null &&
+                     csso.minJumpStartMidEndPoints.Length == 3 ) {
+                    tVec = csso.minJumpStartMidEndPoints[0] + Vector3.down * 0.25f;
+                    Handles.Label( tVec, $"<b>Min: Ht: {csso.minJumpDistHeight.y:0.##}   Dst: {csso.minJumpDistHeight.x:0.##}" +
+                                         $"   tApex: {csso.minTimeApexFull.x:0.##}   tFull: {csso.minTimeApexFull.y:0.##}</b>", labelStyle );
+                }
+            }
+
         }
     }    
     
