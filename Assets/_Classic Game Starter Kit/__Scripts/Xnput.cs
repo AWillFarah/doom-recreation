@@ -8,10 +8,20 @@ public class Xnput : MonoBehaviour {
     static public bool DEBUG_EVERY_FRAME = false;
     static Xnput _S;
 
+    public InfoProperty info = new InfoProperty( $"Xnput Instructions",
+        "To check any of the buttons, us Xnput just like the old Unity Input class." +
+        " The following are available:"                                              +
+        "\n\tXnput.GetButton()"                                                      +
+        "\n\tXnput.GetButtonDown()"                                                  +
+        "\n\tXnput.GetButtonUp()"                                                    +
+        "\n\tXnput.GetAxisRaw()",
+        true, false );
+
     public ButtonState up, down, left, right, b, a, start, select;
     public string buttons;
     public Vector2 moveRaw;
     //public float h, v;
+    public enum eAxis { horizontal, vertical };
     public float hRaw { get { return moveRaw.x; } }
     public float vRaw { get { return moveRaw.y; } }
 
@@ -65,10 +75,10 @@ public class Xnput : MonoBehaviour {
         return _S.buttonDict[eB].up;
     }
 
-    static public float GetAxisRaw( string axis ) {
-        if ( axis == "Horizontal" ) return _S.hRaw;
-        if ( axis == "Vertical" ) return _S.vRaw;
-        Debug.LogError( $"Xnput does not have an axis named \"{axis}\"." );
+    static public float GetAxisRaw( eAxis axis ) {
+        if ( axis == eAxis.horizontal ) return _S.hRaw;
+        if ( axis == eAxis.vertical ) return _S.vRaw;
+        // Debug.LogError( $"Xnput does not have an axis named \"{axis}\"." );
         return 0;
     }
 

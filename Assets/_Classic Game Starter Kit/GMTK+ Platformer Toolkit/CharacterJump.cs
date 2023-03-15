@@ -9,6 +9,7 @@ using UnityEditor;
 //This script handles moving the character on the Y axis, for jumping and gravity
 [RequireComponent(typeof(CharacterMovement))]
 [RequireComponent(typeof(CharacterGround))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class CharacterJump : MonoBehaviour
 {
     // [Header("Components")]
@@ -19,110 +20,102 @@ public class CharacterJump : MonoBehaviour
     private CharacterMovement movement;
     private CharacterGround   ground;
     [Header( "Platformer Character Settings" )]
-    private Character_Settings_SO characterSettingsSO = null;
+    private Character_Settings_SO csso = null;
+    
 
+    // [Header("Calculations")]
+    // public float jumpSpeed;
+    // public float gravMultiplier;
 
-//    [Header("Jumping Stats")]
-//    [SerializeField, Range(2f, 5.5f)][Tooltip("Maximum jump height")] public float jumpHeight = 7.3f;
-
-
-////If you're using your stats from Platformer Toolkit with this CharacterJump, please note that the number on the Jump Duration handle does not match this stat
-////It is re-scaled, from 0.2f - 1.25f, to 1 - 10.
-////You can transform the number on screen to the stat here, using the function at the bottom of this script
-//    [SerializeField, Range(0.2f, 1.25f)][Tooltip("How long it takes to reach that height before coming back down")] public float timeToJumpApex;
-//    [SerializeField, Range(0f, 5f)][Tooltip("Gravity multiplier to apply when going up")] public float upwardMovementMultiplier = 1f;
-//    [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier to apply when coming down")] public float downwardMovementMultiplier = 6.17f;
-//    [SerializeField, Range(0, 1)][Tooltip("How many times can you jump in the air?")] public int maxAirJumps = 0;
-
-//    [Header("Options")]
-//    [Tooltip("Should the character drop when you let go of jump?")] public bool variableJumpHeight;
-//    [SerializeField, Range(1f, 10f)][Tooltip("Gravity multiplier when you let go of jump")] public float jumpCutOff;
-//    [SerializeField][Tooltip("The fastest speed the character can fall")] public float speedLimit;
-//    [SerializeField, Range(0f, 0.3f)][Tooltip("How long should coyote time last?")] public float coyoteTime = 0.15f;
-//    [SerializeField, Range(0f, 0.3f)][Tooltip("How far from ground should we cache your jump?")] public float jumpBuffer = 0.15f;
-
-    [Header("Calculations")]
-    public float jumpSpeed;
-    private float defaultGravityScale;
-    public float gravMultiplier;
-
-    [Header("Current State")]
-    public bool canJumpAgain = false;
+    [Header( "Current State" )]
+    public int jumpsRemaining = 1;
     private bool desiredJump;
     private float jumpBufferCounter;
     private float coyoteTimeCounter = 0;
     private bool pressingJump;
     public bool onGround;
     private bool currentlyJumping;
+    
+    private float scaleP2DGravityTo1;
+    public enum eJumpPhase { none, up, released, down };
+    [SerializeField]
+    private eJumpPhase _jumpPhase = eJumpPhase.none;
+    private float jumpTimeStart; // the Time.time at which the jump began
+    [SerializeField]
+    private eJumpPhase _gravityType = eJumpPhase.up;
+    public float gravityAcc = 0;
 
+    public eJumpPhase gravityType {
+        get { return _gravityType; }
+        set {
+            _gravityType = value;
+            if ( value == eJumpPhase.up ) gravityAcc = csso.jumpGrav.up;
+            else if ( value == eJumpPhase.released ) gravityAcc = csso.jumpGrav.up * csso.jumpSettingsVariableHeight.gravUpMultiplierOnRelease;
+            else if ( value == eJumpPhase.down ) gravityAcc = csso.jumpGrav.down;
+            rigid.gravityScale = scaleP2DGravityTo1 * gravityAcc;
+        }
+    }
+
+    
     void Awake()
     {
         //Find the character's Rigidbody and ground detection and juice scripts
         movement = GetComponent<CharacterMovement>();
         rigid = GetComponent<Rigidbody2D>();
         ground = GetComponent<CharacterGround>();
-        defaultGravityScale = 1f;
-        characterSettingsSO = movement.characterSettingsSO;
-    }
+        // scaleP2DGravityTo1 = 1f;
+        csso = movement.characterSettingsSO;
+        // This multiplier nullifies the Physics2D.gravity setting so that calculations can be done based around meters/sec^2 
+        scaleP2DGravityTo1 = 1 / Physics2D.gravity.y;
 
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        //This function is called when one of the jump buttons (like space or the A button) is pressed.
-        //When we press the jump button, tell the script that we desire a jump.
-        //Also, use the started and canceled contexts to know if we're currently holding the button
-        if (context.started)
-        {
+        gravityType = eJumpPhase.up;
+    }
+    
+
+    // private void SetPhysics() {
+    //     //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
+    //     Vector2 newGravity = new Vector2( 0, ( -2 * csso.jumpHeight ) / ( csso.jumpDuration.up * csso.jumpDuration.up ) );
+    //     rigid.gravityScale = ( newGravity.y / Physics2D.gravity.y ) * gravMultiplier;
+    //     //TODO: Fix this to work with the new Gravity stuff.
+    // }
+
+    void Update() {
+        if ( Xnput.GetButtonDown( Xnput.eButton.a ) ) {
             desiredJump = true;
-            pressingJump = true;
         }
-
-        if (context.canceled)
-        {
-            pressingJump = false;
-        }
+        pressingJump = Xnput.GetButton( Xnput.eButton.a );
     }
 
-    private void SetPhysics() {
-        //Determine the character's gravity scale, using the stats provided. Multiply it by a gravMultiplier, used later
-        Vector2 newGravity = new Vector2( 0, ( -2 * characterSettingsSO.jumpHeight ) / ( characterSettingsSO.jumpDuration.up * characterSettingsSO.jumpDuration.up ) );
-        rigid.gravityScale = ( newGravity.y / Physics2D.gravity.y ) * gravMultiplier;
-    }
-
-    void Update()
-    {
 
 
+    private void FixedUpdate() {
+        // Handling grounding this frame
+        bool prevOnGround = onGround;
+        onGround = ground.GetOnGround();
+        if ( onGround != prevOnGround && onGround) { // Just landed this frame
+            jumpsRemaining = csso.jumpsBetweenGrounding;
+        }
+        
         //If we're not on the ground and we're not currently jumping, that means we've stepped off the edge of a platform.
         //So, start the coyote time counter...
         if (!currentlyJumping && !onGround)
         {
             coyoteTimeCounter += Time.deltaTime;
-        }
-        else
-        {
+        } else {
             //Reset it when we touch the ground, or jump
             coyoteTimeCounter = 0;
         }
-    }
 
-
-
-    private void FixedUpdate()
-    {
-
-        //Check if we're on ground, using Kit's Ground script
-        onGround = ground.GetOnGround();
-
-        SetPhysics();
+        // SetPhysics();
 
         //Jump buffer allows us to queue up a jump, which will play when we next hit the ground
-        if ( characterSettingsSO.jumpBuffer > 0 ) {
+        if ( csso.jumpBuffer > 0 ) {
             //Instead of immediately turning off "desireJump", start counting up...
             //All the while, the DoAJump function will repeatedly be fired off
             if ( desiredJump ) {
                 jumpBufferCounter += Time.deltaTime;
 
-                if ( jumpBufferCounter > characterSettingsSO.jumpBuffer ) {
+                if ( jumpBufferCounter > csso.jumpBuffer ) {
                     //If time exceeds the jump buffer, turn off "desireJump"
                     desiredJump = false;
                     jumpBufferCounter = 0;
@@ -152,120 +145,97 @@ public class CharacterJump : MonoBehaviour
 
     private void CalculateGravity()
     {
-        // I removed all references to the Rigidbody in this script. - JGB 2022-10-30
+        // I completely rewrote this script - JGB 2023-03-14
+        
+        // If on the ground in any way, (even on a moving platform), reset gravity and jumping
+        //  however, number of jumps is set in FixedUpdate
+        if ( onGround ) {
+            gravityType = eJumpPhase.up;
+            currentlyJumping = false;
+            return; // Nothing more to see here
+        }
 
-        //We change the character's gravity based on her Y direction
-
-        //If Kit is going up...
-        if ( velocity.y > 0.01f ) //if (rigid.velocity.y > 0.01f)
-        {
-            if (onGround)
-            {
-                //Don't change it if Kit is stood on something (such as a moving platform)
-                gravMultiplier = defaultGravityScale;
-            }
-            else
-            {
-                //If we're using variable jump height...)
-                if ( characterSettingsSO.jumpSettingsVariableHeight.useVariableJumpHeight )
-                {
-                    //Apply upward multiplier if player is rising and holding jump
-                    if (pressingJump && currentlyJumping) {
-                        gravMultiplier = characterSettingsSO.jumpGrav.up;// characterSettingsSO.upwardMovementMultiplier;
-                    }
-                    //But apply a special downward multiplier if the player lets go of jump
-                    else {
-                        gravMultiplier = characterSettingsSO.jumpGrav.up * characterSettingsSO.jumpSettingsVariableHeight.gravUpMultiplierOnRelease;// characterSettingsSO.jumpCutOff;
+        // In *all* of these cases, the character is NOT grounded
+        switch ( _jumpPhase ) {
+        case eJumpPhase.none: // Don't need to do anything.
+            break;
+        
+        case eJumpPhase.up: // Check to see if jump button was released or apex was reached
+            // If the velocity transitions to downward, meaning we have reached the apex of this jump...
+            if ( velocity.y < 0 ) {
+                _jumpPhase = eJumpPhase.down;
+                gravityType = eJumpPhase.down;
+                velocity.y = 0; // Zeroing the y velocity leads to more consistent down phases
+            } else 
+            // If we're using variable jump height...
+            if ( csso.jumpSettingsVariableHeight.useVariableJumpHeight ) {
+                // If the jump button was released AND the min jump button held time has passed, then move on to the released phase
+                if ( !pressingJump &&
+                     (( Time.time - jumpTimeStart ) > csso.jumpSettingsVariableHeight.minJumpButtonHeldTime )) {
+                    // If velocity should be zeroed when the jump button is released (like in Metroid for NES)... 
+                    if ( csso.jumpSettingsVariableHeight.upwardVelocityZeroing ) {
+                        velocity.y = 0; // zero the y velocity
+                        _jumpPhase = eJumpPhase.down; // move to the down phase
+                        gravityType = eJumpPhase.down;
+                    } else {
+                        _jumpPhase = eJumpPhase.released;
+                        gravityType = eJumpPhase.released;
                     }
                 }
-                else
-                {
-                    gravMultiplier = characterSettingsSO.jumpGrav.up;// characterSettingsSO.upwardMovementMultiplier;
-                }
             }
+            break;
+        
+        case eJumpPhase.released: // The button was released, so we need to check for the apex
+            if ( velocity.y < 0 ) {
+                _jumpPhase = eJumpPhase.down;
+                gravityType = eJumpPhase.down;
+                velocity.y = 0; // Zeroing the y velocity leads to more consistent down phases
+            }
+            break;
+        
+        case eJumpPhase.down: // Look for landing
+            if ( onGround ) {
+                _jumpPhase = eJumpPhase.none;
+                gravityType = eJumpPhase.up;
+            }
+            break;
         }
-
-        //Else if going down...
-        else if ( velocity.y < -0.01f ) //else if (rigid.velocity.y < -0.01f)
-        {
-
-            if (onGround)
-            //Don't change it if Kit is stood on something (such as a moving platform)
-            {
-                gravMultiplier = defaultGravityScale;
-            }
-            else
-            {
-                //Otherwise, apply the downward gravity multiplier as Kit comes back to Earth
-                gravMultiplier = characterSettingsSO.jumpGrav.down; //characterSettingsSO.downwardMovementMultiplier;
-            }
-
-        }
-        //Else not moving vertically at all
-        else
-        {
-            if (onGround)
-            {
-                currentlyJumping = false;
-            }
-
-            gravMultiplier = defaultGravityScale;
-        }
-
-        //Set the character's Rigidbody's velocity
-        //But clamp the Y variable within the bounds of the speed limit, for the terminal velocity assist option
-        velocity.y = Mathf.Clamp( velocity.y, -characterSettingsSO.speedLimit, 100 );
-        //rigid.velocity = new Vector3(velocity.x, Mathf.Clamp(velocity.y, -speedLimit, 100));
+        
+        // Check for terminal fall velocity being reached
+        velocity.y = Mathf.Clamp( velocity.y, -csso.terminalFallVelocity, 100 );
+        // rigid.velocity is set in FixedUpdate()
     }
 
-    private void DoAJump()
-    {
+    
+    private void DoAJump() {
+        if ( jumpsRemaining <= 0 ) return; // If we don't have any jumps, don't jump!
+        
         //Create the jump, provided we are on the ground, in coyote time, or have a double jump available
-        if (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < characterSettingsSO.coyoteTime ) || canJumpAgain) {
+        if (onGround || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < csso.coyoteTime ) || jumpsRemaining > 0) {
             StairMaster.ON_STAIRS = false;
             
             desiredJump = false;
             jumpBufferCounter = 0;
             coyoteTimeCounter = 0;
+            jumpsRemaining--; // Reduce number of remaining jumps
 
-            // Fix the gravity bug that led to double-height jumps when the timing was perfect
-            gravMultiplier = defaultGravityScale;
-            SetPhysics();
+            _jumpPhase = eJumpPhase.up;
+            gravityType = eJumpPhase.up;
 
-            //If we have double jump on, allow us to jump again (but only once)
-            // canJumpAgain = ( characterSettingsSO.maxAirJumps == 1 && canJumpAgain == false);
-            canJumpAgain = ( characterSettingsSO.jumpsBetweenGrounding > 1 && canJumpAgain == false);
-            
-            //Determine the power of the jump, based on our gravity and stats
-            jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * rigid.gravityScale * characterSettingsSO.jumpHeight );
-            if (jumpSpeed > 100) {
-                 Debug.LogError( "Break" );
-            }
-
-            //If Kit is moving up or down when she jumps (such as when doing a double jump), change the jumpSpeed;
-            //This will ensure the jump is the exact same strength, no matter your velocity.
-            if (velocity.y > 0f)
-            {
-                jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
-            }
-            else if (velocity.y < 0f)
-            {
-                jumpSpeed += Mathf.Abs(rigid.velocity.y);
-            }
-
-            //Apply the new jumpSpeed to the velocity. It will be sent to the Rigidbody in FixedUpdate;
-            velocity.y += jumpSpeed;
+            velocity.y = csso.jumpVel.up;
             currentlyJumping = true;
+            
+            jumpTimeStart = Time.time;
         }
 
-        if ( characterSettingsSO.jumpBuffer == 0)
+        if ( csso.jumpBuffer == 0) // TODO: Do we need this anymore? - JGB 2023-03-14
         {
             //If we don't have a jump buffer, then turn off desiredJump immediately after hitting jumping
             desiredJump = false;
         }
     }
 
-    public void BounceUp(float bounceAmount)
+    public void BounceUp(float bounceAmount) // TODO: Do we need this anymore? - JGB 2023-03-14
     {
         //Used by the springy pad
         rigid.AddForce(Vector2.up * bounceAmount, ForceMode2D.Impulse);

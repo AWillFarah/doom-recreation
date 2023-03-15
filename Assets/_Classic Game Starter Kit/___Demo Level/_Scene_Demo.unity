@@ -64116,7 +64116,7 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 901438250}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e32de1d89d87b44009b35b688b575589, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -64164,7 +64164,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5733740ec8f4c4b949d91c4221c360f5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5, g: 0, b: 0.4530375, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -64223,10 +64223,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigid: {fileID: 0}
   velocity: {x: 0, y: 0}
-  jumpSpeed: 0
-  gravMultiplier: 0
-  canJumpAgain: 0
+  jumpsRemaining: 1
   onGround: 0
+  _jumpPhase: 0
+  _gravityType: 1
+  gravityAcc: 0
 --- !u!114 &901438258
 MonoBehaviour:
   m_ObjectHideFlags: 0

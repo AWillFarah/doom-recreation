@@ -1,20 +1,25 @@
+using System;
 using UnityEngine;
 
 //This script is used by both movement and jump to detect when the character is touching the ground
 [RequireComponent(typeof(CharacterController))]
 public class CharacterGround : MonoBehaviour
 {
-        private bool onGround;
+        private bool              onGround;
+        private CharacterMovement cMove;
        
-        [Header("Collider Settings")]
-        [SerializeField][Tooltip("Length of the ground-checking collider")] private float groundLength = 0.95f;
-        [SerializeField][Tooltip("Distance between the ground-checking colliders")] private Vector3 colliderOffset;
+        [Header("Collider Settings - Set in CharacterSettings_SO")]
+        [SerializeField][Tooltip("Length of the ground-checking collider")] public float groundLength = 0.95f;
+        [SerializeField][Tooltip("Distance between the ground-checking colliders")] public Vector3 colliderOffset;
 
         [Header("Layer Masks")]
         [SerializeField][Tooltip("Which layers are read as the ground")] private LayerMask groundLayer;
- 
 
-        private void Update()
+        private void Update() {
+            CheckGrounded();
+        }
+
+        private void CheckGrounded()
         {
             //Determine if the player is stood on objects on the ground layer, using a pair of raycasts
             onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer);
@@ -22,6 +27,9 @@ public class CharacterGround : MonoBehaviour
 
         private void OnDrawGizmos()
         {
+            if ( !Application.isPlaying ) {
+                CheckGrounded();
+            }
             //Draw the ground colliders on screen for debug purposes
             if (onGround) { Gizmos.color = Color.green; } else { Gizmos.color = Color.red; }
             Gizmos.DrawLine(transform.position + colliderOffset, transform.position + colliderOffset + Vector3.down * groundLength);
@@ -30,4 +38,6 @@ public class CharacterGround : MonoBehaviour
 
         //Send ground detection to other scripts
         public bool GetOnGround() { return onGround || StairMaster.ON_STAIRS; }
+        
+        
 }

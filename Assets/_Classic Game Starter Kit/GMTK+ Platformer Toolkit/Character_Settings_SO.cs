@@ -17,35 +17,38 @@ using UnityEditor;
 public class Character_Settings_SO : ScriptableObject {
     static bool DEBUG_JUMP_LINE_CALCULATION = false;
 
+    [Header("CapsuleCollider Settings")]
+    public CGSK_ColliderSettings colliderSettings;
+    // TODO: Actually make these settings affect the CapsuleCollider2D
+    
     [Header( "Movement Stats" )]
     [SerializeField, Range( 0f, 20f )]
-    [Tooltip( "Maximum movement speed" )]
+    [Tooltip( "Maximum movement speed (m/s)" )]
     public float maxSpeed = 10f;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to reach max speed" )]
+    [Tooltip( "How fast to reach max speed (m/s/s)" )]
     public float maxAcceleration = 52f;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to stop after letting go" )]
+    [Tooltip( "How fast to stop after letting go (m/s/s)" )]
     public float maxDeceleration = 52f;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to stop when changing direction" )]
+    [Tooltip( "How fast to stop when changing direction (m/s/s)" )]
     public float maxTurnSpeed = 80f;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to reach max speed when in mid-air" )]
+    [Tooltip( "How fast to reach max speed when in mid-air (m/s/s)" )]
     public float maxAirAcceleration = 0;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to stop in mid-air when no direction is used" )]
+    [Tooltip( "How fast to stop in mid-air when no direction is used (m/s/s)" )]
     public float maxAirDeceleration = 0;
     [SerializeField, Range( 0f, 100f )]
-    [Tooltip( "How fast to stop when changing direction when in mid-air" )]
+    [Tooltip( "How fast to stop when changing direction when in mid-air (m/s/s)" )]
     public float maxAirTurnSpeed = 80f;
-    [SerializeField]
-    [Tooltip( "Friction to apply against movement on stick" )]
-    public float friction = 0;
+    // [SerializeField]
+    // [Tooltip( "Friction to apply against movement on stick" )]
+    // public float friction = 0;
 
     [Header( "Movement Options" )]
-    [Tooltip(
-        "When false, the charcter will skip acceleration and deceleration and instantly move and stop" )]
+    [Tooltip( "When false, the character will skip acceleration and deceleration and instantly move and stop" )]
     public bool useAcceleration = true;
 
 
@@ -96,7 +99,7 @@ public class Character_Settings_SO : ScriptableObject {
     [Header( "Jump Options" )]
     [SerializeField]
     [Tooltip( "The fastest speed the character can fall" )]
-    public float speedLimit = 26.45f;
+    public float terminalFallVelocity = 26.45f;
     [SerializeField, Range( 0f, 0.3f )]
     [Tooltip( "How long should coyote time last?" )]
     public float coyoteTime = 0.15f;
@@ -265,6 +268,7 @@ public class Character_Settings_SO : ScriptableObject {
                 }
             } else if ( minJumpPhase == 1 ) { // Still up, but button has been released
                 if ( v.y <= 0 ) { // We're starting down
+                    v.y = 0;
                     newAcc.y = jumpGrav.down;
                     debugAcc.z = newAcc.y;
                     minJumpStartMidEndPoints[1] = p;
@@ -445,6 +449,18 @@ public class Character_Settings_SO : ScriptableObject {
         jumpSettingsVariableHeightGMTK.minJumpButtonHeldTime = 0.05f; // 100ms is a typical shortest time for a button to be held.
         
         jumpSettingsVariableHeight = jumpSettingsVariableHeightGMTK;
+    }
+
+
+    [System.Serializable]
+    public class CGSK_ColliderSettings {
+        [InfoBox("CapsuleCollider2D size and offset are set automatically from height and width.")]
+        public float height = 2;
+        public float width              = 1f;
+        [Tooltip("CharacterGround raycasts downward center, left, and right. The distance between left and right is groundRaycastWidth.")]
+        public float groundRaycastWidth = 0.5f;
+        [Tooltip("When raycasting downward to check grounding, the raycast begins at groundRaycastDepth above the ground and extends groundRaycastDepth into the ground.")]
+        public float groundRaycastDepth = 0.1f;
     }
 
 }
