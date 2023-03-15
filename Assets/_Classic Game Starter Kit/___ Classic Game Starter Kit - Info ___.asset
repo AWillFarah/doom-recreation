@@ -21,8 +21,8 @@ MonoBehaviour:
     text: You can find a link to detailed instructions for using this starter kit
       at the following Google Doc. You cannot edit the document, but you can make
       comments if you would like me to clarify anything or add any information.
-    linkText: '   <b>Link to Instructions Google Doc</b>'
-    url: https://docs.google.com/document/d/1MME9SmiOWbESyZiEHRC7WudysBDrGfxm5lMhPg_3e0o/edit?usp=sharing
+    linkText: '   <b>Instructions:</b> https://tinyurl.com/mi231-classic-game'
+    url: https://tinyurl.com/mi231-classic-game
   - heading: <b>Contents of this Starter Kit</b>
     text: "Most things can be found in the <b><i>_Classic Game Starter Kit</i></b>
       folder.\n\u2022 <b>Importing a Classic Level</b> - Contains the tools for converting

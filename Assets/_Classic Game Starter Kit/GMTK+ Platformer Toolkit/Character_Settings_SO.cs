@@ -17,9 +17,6 @@ using UnityEditor;
 public class Character_Settings_SO : ScriptableObject {
     static bool DEBUG_JUMP_LINE_CALCULATION = false;
 
-    [Header("CapsuleCollider Settings")]
-    public CGSK_ColliderSettings colliderSettings;
-    // TODO: Actually make these settings affect the CapsuleCollider2D
     
     [Header( "Movement Stats" )]
     [SerializeField, Range( 0f, 20f )]
@@ -111,30 +108,33 @@ public class Character_Settings_SO : ScriptableObject {
     public int jumpsBetweenGrounding = 1;
 
 
+    [Header("CapsuleCollider and Grounding Settings")]
+    public CGSK_ColliderSettings colliderSettings;
+    // TODO: Actually make these settings affect the CapsuleCollider2D
 
 
 
-    [Header( "Juice Settings - Squash and Stretch" )]
-    [SerializeField]
+    [Header( "Juice Settings - Squash and Stretch (currently unused)" )]
+    [XnTools.Hidden]
     public bool squashAndStretch;
-    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
+    [XnTools.Hidden, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
     public Vector3 jumpSquashSettings;
-    [SerializeField, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
+    [XnTools.Hidden, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
     public Vector3 landSquashSettings;
-    [SerializeField, Tooltip( "How powerful should the effect be?" )]
+    [XnTools.Hidden, Tooltip( "How powerful should the effect be?" )]
     public float landSqueezeMultiplier;
-    [SerializeField, Tooltip( "How powerful should the effect be?" )]
+    [XnTools.Hidden, Tooltip( "How powerful should the effect be?" )]
     public float jumpSqueezeMultiplier;
-    [SerializeField]
+    [XnTools.Hidden]
     public float landDrop = 1;
 
-    [Header( "Juice Settings - Tilting" )]
+    [Header("Juice Settings - Tilting (currently unused)")]
 
-    [SerializeField]
+    [XnTools.Hidden]
     public bool leanForward;
-    [SerializeField, Tooltip( "How far should the character tilt?" )]
+    [XnTools.Hidden, Tooltip( "How far should the character tilt?" )]
     public float maxTilt;
-    [SerializeField, Tooltip( "How fast should the character tilt?" )]
+    [XnTools.Hidden, Tooltip( "How fast should the character tilt?" )]
     public float tiltSpeed;
 
 
@@ -454,13 +454,17 @@ public class Character_Settings_SO : ScriptableObject {
 
     [System.Serializable]
     public class CGSK_ColliderSettings {
-        [InfoBox("CapsuleCollider2D size and offset are set automatically from height and width.")]
+        public InfoProperty info = new InfoProperty("Capsule Collider Settings Info",
+            "CapsuleCollider2D size and offset are set automatically from height and width here." +
+            "\nThis is also where the information about grounding raycasts are set.",
+            false, false);
         public float height = 2;
         public float width              = 1f;
         [Tooltip("CharacterGround raycasts downward center, left, and right. The distance between left and right is groundRaycastWidth.")]
         public float groundRaycastWidth = 0.5f;
         [Tooltip("When raycasting downward to check grounding, the raycast begins at groundRaycastDepth above the ground and extends groundRaycastDepth into the ground.")]
         public float groundRaycastDepth = 0.1f;
+        [Tooltip("Which layers are read as the ground")] public LayerMask groundLayers;
     }
 
 }

@@ -15,7 +15,7 @@ public class CharacterMovement : MonoBehaviour {
     CharacterGround ground;
 
 
-    [Header( "GMTK Platformer Settings" )]
+    [Header( "Character Settings Scriptable Object" )]
     public Character_Settings_SO characterSettingsSO = null;
 
     //[Header("Movement Stats")]
@@ -31,18 +31,17 @@ public class CharacterMovement : MonoBehaviour {
     //[Header("Options")]
     //[Tooltip("When false, the charcter will skip acceleration and deceleration and instantly move and stop")] public bool useAcceleration;
 
-    [Header( "Calculations" )]
-    public float directionX;
+    [Header( "Current State" )]
+    [XnTools.ReadOnly] public float directionX;
     private Vector2 desiredVelocity;
-    public  Vector2 velocity;
+    [XnTools.ReadOnly] public Vector2 velocity;
     private float   maxSpeedChange;
     private float   acceleration;
     private float   deceleration;
     private float   turnSpeed;
 
-    [Header( "Current State" )]
-    public bool onGround;
-    public bool pressingKey;
+    [XnTools.ReadOnly] public bool onGround;
+    [XnTools.ReadOnly] public bool nonZeroHorizontalInput;
 
     private void Awake() {
         if ( characterSettingsSO == null ) {
@@ -72,8 +71,8 @@ public class CharacterMovement : MonoBehaviour {
         //Also tells us that we are currently pressing a direction button
         if ( directionX != 0 ) {
             transform.localScale = new Vector3( directionX > 0 ? 1 : -1, 1, 1 );
-            pressingKey = true;
-        } else { pressingKey = false; }
+            nonZeroHorizontalInput = true;
+        } else { nonZeroHorizontalInput = false; }
 
         //Calculate's the character's desired velocity - which is the direction you are facing, multiplied by the character's maximum speed
         //Friction is not used in this game
@@ -109,7 +108,7 @@ public class CharacterMovement : MonoBehaviour {
         deceleration = onGround ? characterSettingsSO.maxDeceleration : characterSettingsSO.maxAirDeceleration;
         turnSpeed = onGround ? characterSettingsSO.maxTurnSpeed : characterSettingsSO.maxAirTurnSpeed;
 
-        if ( pressingKey ) {
+        if ( nonZeroHorizontalInput ) {
             //If the sign (i.e. positive or negative) of our input direction doesn't match our movement, it means we're turning around and so should use the turn speed stat.
             // if ( Mathf.Sign( directionX ) != Mathf.Sign( velocity.x ) ) { // This was a really slow way to do this. - JGB 2023-03-14
             if ( directionX * velocity.x < 0 ) { // This does the same thing without two function calls
@@ -144,17 +143,19 @@ public class CharacterMovement_Editor : Editor {
 
     private CharacterMovement cMove;
     private CapsuleCollider2D cC2D;
-
+    private CharacterGround cGround;
     private void OnEnable() {
         cMove = (CharacterMovement) target;
         cC2D = cMove.GetComponent<CapsuleCollider2D>();
+        cGround = cMove.GetComponent<CharacterGround>();
     }
 
 
     private void OnSceneGUI() {
         if ( cMove                     == null ) return;
         if ( cMove.characterSettingsSO == null ) return;
-        if ( cC2D                      == null ) return;
+        if (cC2D == null) return;
+        if (cGround == null) return;
 
         Character_Settings_SO csso = cMove.characterSettingsSO;
 
@@ -167,6 +168,12 @@ public class CharacterMovement_Editor : Editor {
         Vector2 offset = Vector2.zero;
         offset.y = csso.colliderSettings.height * 0.5f;
         cC2D.offset = offset;
+
+        // Adjust the CharacterGround settings based on csso
+        cGround.raycastOffsetHeight = new Vector3(0, csso.colliderSettings.groundRaycastDepth * 0.5f, 0);
+        cGround.raycastOffsetWidth = new Vector3(csso.colliderSettings.groundRaycastWidth * 0.5f, 0, 0);
+        cGround.groundLength = csso.colliderSettings.groundRaycastDepth;
+        cGround.groundLayers = csso.colliderSettings.groundLayers;
 
         // Show the ground raycasts
         Handles.matrix = Matrix4x4.Translate( cMove.transform.position );

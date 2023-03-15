@@ -12,11 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd63b70c02c5445bbee752f38ead772, type: 3}
   m_Name: CGSK_Settings_SuperMarioBros
   m_EditorClassIdentifier: 
-  colliderSettings:
-    height: 2
-    width: 0.5
-    groundRaycastWidth: 0.5
-    groundRaycastDepth: 0.1
   maxSpeed: 5.5
   maxAcceleration: 13
   maxDeceleration: 13
@@ -39,8 +34,8 @@ MonoBehaviour:
   jumpSettingsVariableHeightCGSK:
     useVariableJumpHeight: 1
     upwardVelocityZeroing: 0
-    minJumpButtonHeldTime: 0.176
-    gravUpMultiplierOnRelease: 3.94
+    minJumpButtonHeldTime: 0.1
+    gravUpMultiplierOnRelease: 4.51
   jumpSettingsVariableHeightGMTK:
     useVariableJumpHeight: 0
     upwardVelocityZeroing: 0
@@ -59,7 +54,7 @@ MonoBehaviour:
     up: -23.611109
     down: -53.125008
   maxJumpDistHeight: {x: 5.499999, y: 4.25}
-  minJumpDistHeight: {x: 3.3550007, y: 2.6573374}
+  minJumpDistHeight: {x: 2.695, y: 1.9983038}
   jumpSettingsGMTK:
     jumpDuration: 5
     downGravity: 6.17
@@ -70,6 +65,21 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBuffer: 0.15
   jumpsBetweenGrounding: 1
+  colliderSettings:
+    info:
+      title: Capsule Collider Settings Info
+      text: CapsuleCollider2D size and offset are set automatically from height and
+        width here. This is also where the information about grounding raycasts are
+        set.
+      showAsFoldout: 0
+      foldoutOpenByDefault: 0
+    height: 2
+    width: 0.5
+    groundRaycastWidth: 0.4
+    groundRaycastDepth: 0.1
+    groundLayers:
+      serializedVersion: 2
+      m_Bits: 64
   squashAndStretch: 0
   jumpSquashSettings: {x: 0, y: 0, z: 0}
   landSquashSettings: {x: 0, y: 0, z: 0}
