@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using XnTools;
 
+[DefaultExecutionOrder(10)]
 public class StairMaster : MonoBehaviour {
     static public StairMaster S;
     // static public bool ON_STAIRS;
@@ -74,7 +76,21 @@ public class StairMaster : MonoBehaviour {
         }
     }
 
+    void CheckInput() {
+        dirY = 0;
+        if ( Xnput.GetButton( Xnput.eButton.up ) ) dirY += 1;
+        if ( Xnput.GetButton( Xnput.eButton.down ) ) dirY -= 1;
+
+        dirX = 0;
+        if ( Xnput.GetButton( Xnput.eButton.right ) ) dirX += 1;
+        if ( Xnput.GetButton( Xnput.eButton.left ) ) dirX -= 1;
+        
+        if (ON_STAIRS && Xnput.GetButton(Xnput.eButton.a)) onStairs = false;
+    }
+    
     private void FixedUpdate() {
+        CheckInput();
+        
         if ( !onStairs ) {
             if ( stairs != null ) {
                 // Only up and down will attach to stairs
