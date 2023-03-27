@@ -37,19 +37,8 @@ public class Stairs : MonoBehaviour {
 
     private void DelayedValidate() {
         if ( this == null || gameObject == null || transform == null ) return;
-        // Check for required child
-        // See if there is a child named "Capsule"
-        if ( childTrans == null ) childTrans = transform.Find( "Capsule" );
-        if ( childTrans == null ) {
-            Debug.LogError( "For the Stairs to work, they must have a child named Capsule." );
-            return;
-        }
-        if ( sRend == null ) sRend = childTrans.GetComponent<SpriteRenderer>();
-        if ( capC  == null ) capC = childTrans.GetComponent<CapsuleCollider2D>();
-        if (sRend == null) Debug.LogError( "For the Stairs to work, the child named Capsule must have a SpriteRenderer." );
-        if (capC == null) Debug.LogError( "For the Stairs to work, the child named Capsule must have a CapsuleCollider2D." );
-        if ( sRend == null || capC == null ) return;
-        
+        // Check for required child and components
+        CheckChild();
         // Now that we know everything is good, proceed
         // Orient properly
         transform.localEulerAngles = new Vector3( 0, 0, (int)orientation );
@@ -62,6 +51,28 @@ public class Stairs : MonoBehaviour {
 
         p0 = transform.position;
         p1 = p0 + ( childTrans.up * actualLength );
+    }
+
+    void CheckChild() {
+        // See if there is a child named "Capsule"
+        if ( childTrans == null ) childTrans = transform.Find( "Capsule" );
+        if ( childTrans == null ) {
+            GameObject go = new GameObject( "Capsule", typeof(SpriteRenderer), typeof(CapsuleCollider2D) );
+            Debug.LogError( "For the Stairs to work, they must have a child named Capsule. One has been added." );
+            UnityEditor.EditorApplication.delayCall += DelayedValidate;
+        }
+        if ( sRend == null ) sRend = childTrans.GetComponent<SpriteRenderer>();
+        if ( sRend == null ) {
+            childTrans.gameObject.AddComponent<SpriteRenderer>();
+            Debug.LogError( "For the Stairs to work, the child named Capsule must have a SpriteRenderer. One has been added." );
+            UnityEditor.EditorApplication.delayCall += DelayedValidate;
+        }
+        if ( capC  == null ) capC = childTrans.GetComponent<CapsuleCollider2D>();
+        if ( capC == null ) {
+            childTrans.gameObject.AddComponent<CapsuleCollider2D>();
+            Debug.LogError( "For the Stairs to work, the child named Capsule must have a CapsuleCollider2D. One has been added." );
+            UnityEditor.EditorApplication.delayCall += DelayedValidate;
+        }
     }
     #endif
 }
