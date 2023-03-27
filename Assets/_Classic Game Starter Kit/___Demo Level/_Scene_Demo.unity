@@ -64054,35 +64054,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &901438250 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 810803037116765589, guid: 0730cc2c09a63450eb54ae47ab48773c, type: 3}
-  m_PrefabInstance: {fileID: 810803038013738687}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &901438255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 810803037116765584, guid: 0730cc2c09a63450eb54ae47ab48773c, type: 3}
   m_PrefabInstance: {fileID: 810803038013738687}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &901438259
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 901438250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2a97ef021f0469e83e3d68e36be372, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stairSpeed: 5
-  stairsEndLimit: 0.01
-  dirX: 0
-  dirY: 0
-  stairs: {fileID: 0}
-  _onStairs: 0
-  stairsU: -1
 --- !u!1001 &941683838
 PrefabInstance:
   m_ObjectHideFlags: 0
