@@ -16,6 +16,7 @@ public class CharacterMovement : MonoBehaviour {
 
 
     [Header( "Character Settings Scriptable Object" )]
+    [NaughtyAttributes.Expandable]
     public Character_Settings_SO characterSettingsSO = null;
 
     //[Header("Movement Stats")]
