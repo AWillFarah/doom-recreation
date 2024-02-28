@@ -10,9 +10,10 @@ using UnityEditor;
 [RequireComponent( typeof(Rigidbody2D) )]
 public class CharacterMovement : MonoBehaviour {
 
-    [Header( "Components" )]
-    private Rigidbody2D body;
-    CharacterGround ground;
+    // [Header( "Components" )]
+    private Rigidbody2D       body;
+    private CharacterGround   ground;
+    private CapsuleCollider2D cC2D;
 
 
     [Header( "Character Settings Scriptable Object" )]
@@ -53,6 +54,10 @@ public class CharacterMovement : MonoBehaviour {
         //Find the character's Rigidbody and ground detection script
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<CharacterGround>();
+        cC2D = GetComponent<CapsuleCollider2D>();
+
+        SetCapsuleCollider2DValues(cC2D, characterSettingsSO);
+        SetGroundingRayValues( ground, characterSettingsSO );
     }
 
     // public void OnMovement(InputAction.CallbackContext context)
@@ -133,6 +138,26 @@ public class CharacterMovement : MonoBehaviour {
         //If we're not using acceleration and deceleration, just send our desired velocity (direction * max speed) to the Rigidbody
         velocity.x = desiredVelocity.x;
     }
+
+    internal void SetCapsuleCollider2DValues(CapsuleCollider2D cC2D, Character_Settings_SO csso) {
+        // Adjust the CapsuleCollider2D based on settings in csso
+        Vector2 size = Vector2.zero;
+        size.x = csso.colliderSettings.width;
+        size.y = csso.colliderSettings.height;
+        cC2D.size = size;
+
+        Vector2 offset = Vector2.zero;
+        offset.y = csso.colliderSettings.height * 0.5f;
+        cC2D.offset = offset;
+    }
+
+    internal void SetGroundingRayValues(CharacterGround cg, Character_Settings_SO csso) {
+        // Adjust the CharacterGround settings based on csso
+        cg.raycastOffsetHeight = new Vector3(0, csso.colliderSettings.groundRaycastDepth * 0.5f, 0);
+        cg.raycastOffsetWidth = new Vector3(csso.colliderSettings.groundRaycastWidth * 0.5f, 0, 0);
+        cg.groundLength = csso.colliderSettings.groundRaycastDepth;
+        cg.groundLayers = csso.colliderSettings.groundLayers;
+    } 
 }
 
 
@@ -161,20 +186,10 @@ public class CharacterMovement_Editor : Editor {
         Character_Settings_SO csso = cMove.characterSettingsSO;
 
         // Adjust the CapsuleCollider2D based on settings in csso
-        Vector2 size = Vector2.zero;
-        size.x = csso.colliderSettings.width;
-        size.y = csso.colliderSettings.height;
-        cC2D.size = size;
-
-        Vector2 offset = Vector2.zero;
-        offset.y = csso.colliderSettings.height * 0.5f;
-        cC2D.offset = offset;
+        cMove.SetCapsuleCollider2DValues( cC2D, csso );
 
         // Adjust the CharacterGround settings based on csso
-        cGround.raycastOffsetHeight = new Vector3(0, csso.colliderSettings.groundRaycastDepth * 0.5f, 0);
-        cGround.raycastOffsetWidth = new Vector3(csso.colliderSettings.groundRaycastWidth * 0.5f, 0, 0);
-        cGround.groundLength = csso.colliderSettings.groundRaycastDepth;
-        cGround.groundLayers = csso.colliderSettings.groundLayers;
+        cMove.SetGroundingRayValues(cGround, csso);
 
         // Show the ground raycasts
         Handles.matrix = Matrix4x4.Translate( cMove.transform.position );

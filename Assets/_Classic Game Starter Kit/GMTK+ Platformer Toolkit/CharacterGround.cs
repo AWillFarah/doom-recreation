@@ -7,9 +7,9 @@ public class CharacterGround : MonoBehaviour {
     private CharacterMovement cMove;
 
     [Header("Collider Settings - Set in CharacterSettings_SO")]
-    [XnTools.ReadOnly] [Tooltip("Length of the ground-checking collider")] public float groundLength = 0.95f;
-    [XnTools.ReadOnly] public Vector3 raycastOffsetHeight;
-    [XnTools.ReadOnly] public Vector3 raycastOffsetWidth;
+    [XnTools.ReadOnly][SerializeField] [Tooltip("Length of the ground-checking collider")] public float groundLength = 0.95f;
+    [XnTools.ReadOnly][SerializeField] public Vector3 raycastOffsetHeight;
+    [XnTools.ReadOnly][SerializeField] public Vector3 raycastOffsetWidth;
 
     //[XnTools.ReadOnly] [Tooltip("Distance between the ground-checking colliders")] public Vector3 colliderOffset;
     [XnTools.ReadOnly] [Tooltip("Which layers are read as the ground")] public LayerMask groundLayers;
