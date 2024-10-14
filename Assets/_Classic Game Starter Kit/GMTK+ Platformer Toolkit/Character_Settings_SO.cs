@@ -456,7 +456,7 @@ public class Character_Settings_SO : ScriptableObject {
     public class CGSK_ColliderSettings {
         public InfoProperty info = new InfoProperty("Capsule Collider Settings Info",
             "CapsuleCollider2D size and offset are set automatically from height and width here." +
-            "\nThis is also where the information about grounding raycasts are set.",
+            "\nAlso set grounding raycasts info here.",
             false, false);
         public float height = 2;
         public float width              = 1f;
