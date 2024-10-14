@@ -21,7 +21,7 @@ MonoBehaviour:
   maxAirTurnSpeed: 3
   useAcceleration: 1
   jumpSettingsType: 0
-  showJumpLine: 1
+  showJumpLine: 0
   jumpHeight: 4.25
   jumpSettingsTime:
     fullJumpDurationMin: 0.5
@@ -73,7 +73,7 @@ MonoBehaviour:
       showAsFoldout: 0
       foldoutOpenByDefault: 0
     height: 2
-    width: 0.5
+    width: 0.6
     groundRaycastWidth: 0.4
     groundRaycastDepth: 0.1
     groundLayers:
