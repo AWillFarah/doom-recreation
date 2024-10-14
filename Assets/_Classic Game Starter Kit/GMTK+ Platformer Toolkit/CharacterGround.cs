@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 //This script is used by both movement and jump to detect when the character is touching the ground
-[RequireComponent(typeof(CharacterController))]
+// [RequireComponent(typeof(CharacterController))]
 public class CharacterGround : MonoBehaviour {
     private CharacterMovement cMove;
 
