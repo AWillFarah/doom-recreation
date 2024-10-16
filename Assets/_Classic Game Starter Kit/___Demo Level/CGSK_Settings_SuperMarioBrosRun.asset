@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4dd63b70c02c5445bbee752f38ead772, type: 3}
-  m_Name: CGSK_Settings_SuperMarioBros
+  m_Name: CGSK_Settings_SuperMarioBrosRun
   m_EditorClassIdentifier: 
-  maxSpeed: 6
+  maxSpeed: 9
   maxAcceleration: 13
   maxDeceleration: 13
   maxTurnSpeed: 13
@@ -22,14 +22,14 @@ MonoBehaviour:
   useAcceleration: 1
   jumpSettingsType: 0
   showJumpLine: 1
-  jumpHeight: 4.25
+  jumpHeight: 6.25
   jumpSettingsTime:
     fullJumpDurationMin: 0.5
     fullJumpDurationMax: 1
     jumpApexFraction: 0.6
   jumpSettingsDistance:
     fullJumpDistanceMin: 0.5
-    fullJumpDistanceMax: 5.5
+    fullJumpDistanceMax: 9
     jumpApexFraction: 0.6
   jumpSettingsVariableHeightCGSK:
     useVariableJumpHeight: 1
@@ -42,19 +42,19 @@ MonoBehaviour:
     minJumpButtonHeldTime: 0.05
     gravUpMultiplierOnRelease: 0
   jumpDist:
-    up: 3.3000002
-    down: 2.1999998
+    up: 5.4
+    down: 3.6
   jumpDuration:
-    up: 0.55
-    down: 0.36666664
+    up: 0.6
+    down: 0.39999998
   jumpVel:
-    up: 15.454545
-    down: 23.18182
+    up: 20.833332
+    down: 31.25
   jumpGrav:
-    up: -28.09917
-    down: -63.223152
-  maxJumpDistHeight: {x: 5.499999, y: 4.25}
-  minJumpDistHeight: {x: 2.4599986, y: 1.603339}
+    up: -34.72222
+    down: -78.12501
+  maxJumpDistHeight: {x: 8.999996, y: 6.25}
+  minJumpDistHeight: {x: 3.8699985, y: 2.2888894}
   jumpSettingsGMTK:
     jumpDuration: 5
     downGravity: 6.17
