@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Goomba : MonoBehaviour {
+    
     [Header("Inscribed")]
     public float     speed = 10;
     public LayerMask raycastLayers; // Ground and Enemy
@@ -31,16 +32,16 @@ public class Goomba : MonoBehaviour {
         rightHit = Physics2D.Raycast( pos2D, Vector2.right, raycastDistance, raycastLayers );
         // If so, turn around
         if ( rightHit.collider != null ) { // we hit something!
-            currSpeed = -currSpeed;
+            currSpeed = -speed;
         }
-        
+
         leftHit = Physics2D.Raycast( pos2D, Vector2.left, raycastDistance, raycastLayers );
         // If so, turn around
         if ( leftHit.collider != null ) { // we hit something!
-            currSpeed = -currSpeed;
+            currSpeed = speed;
         }
         col2d.enabled = true;
-        
+            
         Vector2 vel = r2d.velocity;
         vel.x = currSpeed;
         r2d.velocity = vel;

@@ -78,7 +78,7 @@ MonoBehaviour:
     groundRaycastDepth: 0.1
     groundLayers:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 192
   squashAndStretch: 0
   jumpSquashSettings: {x: 0, y: 0, z: 0}
   landSquashSettings: {x: 0, y: 0, z: 0}
