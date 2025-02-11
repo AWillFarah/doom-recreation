@@ -25,12 +25,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6184872203763171321}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6184872203763171322
 MonoBehaviour:
@@ -44,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: e886a8e09a07e4296a56e160d7622a1f, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 0d0efaa906d274ca59289d241b75bb43, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -150,6 +151,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0202e2c81a814cf3b709eb5997b420f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  info:
+    title: Xnput Instructions
+    text: "To check any of the buttons, us Xnput just like the old Unity Input class.
+      The following are available:\n\tXnput.GetButton()\n\tXnput.GetButtonDown()\n\tXnput.GetButtonUp()\n\tXnput.GetAxisRaw()"
+    showAsFoldout: 1
+    foldoutOpenByDefault: 0
   up:
     state: 0
   down:
@@ -167,4 +174,20 @@ MonoBehaviour:
   select:
     state: 0
   buttons: 
+  move: {x: 0, y: 0}
   moveRaw: {x: 0, y: 0}
+  rightStick: {x: 0, y: 0}
+  rightStickRaw: {x: 0, y: 0}
+  moveX: 0
+  moveY: 0
+  moveRawX: 0
+  moveRawY: 0
+  rightStickX: 0
+  rightStickY: 0
+  rightStickRawX: 0
+  rightStickRawY: 0
+  useGravityAndSensitivity: 1
+  sensitivity: 3
+  gravity: 3
+  snap: 1
+  deadZone: 0.1

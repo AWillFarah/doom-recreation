@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using XnTools;
 
 #if UNITY_EDITOR
 using UnityEditor;

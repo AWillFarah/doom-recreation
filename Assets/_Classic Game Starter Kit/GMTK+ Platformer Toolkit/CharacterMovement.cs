@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using XnTools;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
