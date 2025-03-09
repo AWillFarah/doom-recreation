@@ -81,8 +81,10 @@
 
 # Classic Game Starter Kit (CGSK) Info
 
-From the **Help** menu, choose "**––– Show CGSK Project Info –––**" to learn a lot more about the CGSK. 
+From the **Help** menu, choose "**––– Show CGSK Project Info –––**" to learn a lot more about the CGSK.
 
+Please refer to this [**Instructions Doc**](http://tinyurl.com/mi231-classic-game) for the best CGSK info!
+* **http://tinyurl.com/mi231-classic-game**
 
 
 # Unity Project Template

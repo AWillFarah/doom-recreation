@@ -27,10 +27,6 @@ MonoBehaviour:
     fullJumpDurationMin: 0.5
     fullJumpDurationMax: 1
     jumpApexFraction: 0.6
-  jumpSettingsDistance:
-    fullJumpDistanceMin: 0.5
-    fullJumpDistanceMax: 5.5
-    jumpApexFraction: 0.6
   jumpSettingsVariableHeightCGSK:
     useVariableJumpHeight: 1
     upwardVelocityZeroing: 0
@@ -41,6 +37,10 @@ MonoBehaviour:
     upwardVelocityZeroing: 0
     minJumpButtonHeldTime: 0.05
     gravUpMultiplierOnRelease: 0
+  jumpSettingsDistance:
+    fullJumpDistanceMin: 0.5
+    fullJumpDistanceMax: 5.5
+    jumpApexFraction: 0.6
   jumpDist:
     up: 3.3000002
     down: 2.1999998

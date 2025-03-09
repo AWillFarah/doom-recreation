@@ -3,231 +3,251 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using NaughtyAttributes;
+using XnTools;
 
-namespace XnTools {
-    public class Xnput : MonoBehaviour {
-        static public bool  DEBUG             = false;
-        static public bool  DEBUG_EVERY_FRAME = false;
-        static        Xnput _S;
+public class Xnput : MonoBehaviour {
+    static public  bool  DEBUG             = false;
+    static public  bool  DEBUG_EVERY_FRAME = false;
+    static private Xnput _S;
+    static private bool  _S_IsSet = false;
 
-        public InfoProperty info = new InfoProperty( $"Xnput Instructions",
-            "To check any of the buttons, us Xnput just like the old Unity Input class." +
-            " The following are available:" +
-            "\n\tXnput.GetButton()" +
-            "\n\tXnput.GetButtonDown()" +
-            "\n\tXnput.GetButtonUp()" +
-            "\n\tXnput.GetAxisRaw()",
-            true, false );
+    public InfoProperty info = new InfoProperty( $"Xnput Instructions",
+        "To check any of the buttons, us Xnput just like the old Unity Input class." +
+        " The following are available:" +
+        "\n\tXnput.GetButton()" +
+        "\n\tXnput.GetButtonDown()" +
+        "\n\tXnput.GetButtonUp()" +
+        "\n\tXnput.GetAxisRaw()",
+        true, false );
 
-        public ButtonState up, down, left, right, b, a, start, select;
-        public string      buttons;
-        [HideInInspector]
-        public Vector2     move, moveRaw, rightStick, rightStickRaw;
+    public ButtonState up, down, left, right, b, a, start, select;
+    public string      buttons;
+    [HideInInspector]
+    public Vector2 move, moveRaw, rightStick, rightStickRaw;
 
-        [MinMaxSlider( -1, 1 )][SerializeField]
-        private Vector2 moveX, moveY, rightStickX, rightStickY;
+    [MinMaxSlider( -1, 1 )]
+    [SerializeField]
+    private Vector2 moveX, moveY, rightStickX, rightStickY;
 
-        [Header( "Settings" )]
-        [Tooltip("Unlike Unity's Input.GetAxis, gravity and sensitivity affect joysticks and gamepad sticks in addition to keyboard input.")]
-        public bool useGravityAndSensitivity = true;
-        public float sensitivity = 3;
-        public float gravity     = 3;
-        [Tooltip("If the current value is the opposite sign from the desired value, snap will jump to 0 before easing the input.")]
-        public bool  snap        = true;
-        [Range(0,1)]
-        public float deadZone = 0.1f;
+    [Header( "Settings" )]
+    [Tooltip(
+        "Unlike Unity's Input.GetAxis, gravity and sensitivity affect joysticks and gamepad sticks in addition to keyboard input." )]
+    public bool useGravityAndSensitivity = true;
+    public float sensitivity = 3;
+    public float gravity     = 3;
+    [Tooltip(
+        "If the current value is the opposite sign from the desired value, snap will jump to 0 before easing the input." )]
+    public bool snap = true;
+    [Range( 0, 1 )]
+    public float deadZone = 0.1f;
 
-        //public float h, v;
-        public enum eAxis { horizontal, vertical };
+    //public float h, v;
+    public enum eAxis { horizontal, vertical, rightStickH, rightStickV };
 
-        public float h => move.x;
-        public float v => move.y;
+    public float h => move.x;
+    public float v => move.y;
 
-        public float hRaw => moveRaw.x;
-        public float vRaw => moveRaw.y;
+    static public float H => _S_IsSet ? _S.h : 0;
+    static public float V => _S_IsSet ? _S.v : 0;
 
-        public float rsH => rightStick.x;
-        public float rsV => rightStick.y;
+    public float hRaw => moveRaw.x;
+    public float vRaw => moveRaw.y;
 
-        public float rsHRaw => rightStickRaw.x;
-        public float rsVRaw => rightStickRaw.y;
+    public float rsH => rightStick.x;
+    public float rsV => rightStick.y;
+
+    public float rsHRaw => rightStickRaw.x;
+    public float rsVRaw => rightStickRaw.y;
 
 
-        public enum eButton {
-            up, down, left,
-            right, b, a,
-            start, select
-        };
+    public enum eButton {
+        up, down, left,
+        right, b, a,
+        start, select
+    };
 
-        public Dictionary<eButton, ButtonState> buttonDict;
+    public Dictionary<eButton, ButtonState> buttonDict;
 
-        // Start is called before the first frame update
-        void Awake() {
-            if ( _S != null ) {
-                Destroy( gameObject );
-                return;
-            }
-            _S = this;
-            buttonDict = new Dictionary<eButton, ButtonState>();
-            buttonDict.Add( eButton.up, up );
-            buttonDict.Add( eButton.down, down );
-            buttonDict.Add( eButton.left, left );
-            buttonDict.Add( eButton.right, right );
-            buttonDict.Add( eButton.a, a );
-            buttonDict.Add( eButton.b, b );
-            buttonDict.Add( eButton.start, start );
-            buttonDict.Add( eButton.select, select );
+    // Start is called before the first frame update
+    void Awake() {
+        if ( _S != null ) {
+            Destroy( gameObject );
+            return;
         }
+        _S = this;
+        _S_IsSet = true;
 
-        // LateUpdate is called once per frame after all Updates have completed
-        void LateUpdate() {
-            buttons =
-                $"U:{up.Char} D:{down.Char} L:{left.Char} R:{right.Char} B:{b.Char} A:{a.Char} Se:{select.Char} St:{start.Char}";
-            if ( DEBUG_EVERY_FRAME ) Debug.Log( buttons );
-            // Progress all ButtonStates
-            foreach ( ButtonState bs in buttonDict.Values ) {
-                bs.Progress();
-            }
-            //up.Progress();
-            //down.Progress();
-            //left.Progress();
-            //right.Progress();
-            //a.Progress();
-            //b.Progress();
-            //start.Progress();
-            //select.Progress();
-
-            // Manage easing on move, h, and v values
-            move = AxisEasing( move, moveRaw, Time.deltaTime );
-            // Expose in Inspector
-            moveX[0] = move.x;
-            moveX[1] = moveRaw.x;
-            moveY[0] = move.y;
-            moveY[1] = moveRaw.y;
-            if ( DEBUG ) Debug.Log( $"move: {move}" );
-            
-            
-            rightStick = AxisEasing( rightStick, rightStickRaw, Time.deltaTime );
-            // Expose in Inspector
-            rightStickX[0] = rightStick.x;
-            rightStickX[1] = rightStickRaw.x;
-            rightStickY[0] = rightStick.y;
-            rightStickY[1] = rightStickRaw.y;
-            
-            if ( DEBUG ) Debug.Log( $"rightStick: {rightStick}" );
-        }
-        
-
-        static public bool GetButton( eButton eB ) {
-            return _S.buttonDict[eB];
-        }
-
-        static public bool GetButtonDown( eButton eB ) {
-            return _S.buttonDict[eB].down;
-        }
-
-        static public bool GetButtonUp( eButton eB ) {
-            return _S.buttonDict[eB].up;
-        }
-
-        static public float GetAxisRaw( eAxis axis ) {
-            if ( axis == eAxis.horizontal ) return _S.hRaw;
-            if ( axis == eAxis.vertical ) return _S.vRaw;
-            // Debug.LogError( $"Xnput does not have an axis named \"{axis}\"." );
-            return 0;
-        }
-
-
-        public float AxisEasing(float curr, float target, float deltaTime) {
-            // If target is on opposite side of 0 from curr, snap to 0
-            if ( target != 0 && curr != 0 ) {
-                if ( Mathf.Sign( target ) != Mathf.Sign( curr ) ) {
-                    return 0;
-                }
-            }
-            if ( useGravityAndSensitivity ) {
-                float maxDelta;
-                if ( Mathf.Abs( curr ) < Mathf.Abs( target ) ) {
-                    // target is further from 0 than curr, so use sensitivity
-                    maxDelta = sensitivity * deltaTime;
-                } else {
-                    // target is closer to 0 than curr, so use gravity
-                    maxDelta = gravity * deltaTime;
-                }
-                return (Mathf.Abs(target - curr) <= maxDelta) ? target : curr + Mathf.Sign(target - curr) * maxDelta;
-            }
-            return target;
-        }
-
-        public Vector2 AxisEasing( Vector2 curr, Vector2 target, float deltaTime ) {
-            curr.x = AxisEasing( curr.x, target.x, deltaTime );
-            curr.y = AxisEasing( curr.y, target.y, deltaTime );
-            return curr;
-        }
-
-        
-#region PlayerInput Functions
-
-        private void OnMove( InputValue value ) {
-            Vector2 moveOld = move;
-            moveRaw = value.Get<Vector2>();
-            if ( moveRaw.magnitude < deadZone ) moveRaw = Vector2.zero;
-            if ( DEBUG ) Debug.Log( $"moveRaw: {moveRaw}" );
-        }
-
-        private void OnRightStick( InputValue value ) {
-            Vector2 rsOld = rightStick;
-            rightStickRaw = value.Get<Vector2>();
-            if ( rightStickRaw.magnitude < deadZone ) rightStickRaw = Vector2.zero;
-            if ( DEBUG ) Debug.Log( $"rightStickRaw: {rightStickRaw}" );
-        }
-
-        private void OnUp( InputValue value ) {
-            up.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"up: {up}" );
-            //float f = value.Get<float>();
-            //if ( f > 0.5f ) up = true;
-        }
-
-        private void OnDown( InputValue value ) {
-            down.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"down: {down}" );
-        }
-
-        private void OnLeft( InputValue value ) {
-            left.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"left: {left}" );
-        }
-
-        private void OnRight( InputValue value ) {
-            right.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"right: {right}" );
-        }
-
-        private void OnA( InputValue value ) {
-            a.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"a: {a}" );
-        }
-
-        private void OnB( InputValue value ) {
-            b.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"b: {b}" );
-        }
-
-        private void OnStart( InputValue value ) {
-            start.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"start: {start}" );
-        }
-
-        private void OnSelect( InputValue value ) {
-            select.Set( value.isPressed );
-            if ( DEBUG ) Debug.Log( $"select: {select}" );
-        }
-
-#endregion
+        buttonDict = new Dictionary<eButton, ButtonState>();
+        buttonDict.Add( eButton.up, up );
+        buttonDict.Add( eButton.down, down );
+        buttonDict.Add( eButton.left, left );
+        buttonDict.Add( eButton.right, right );
+        buttonDict.Add( eButton.a, a );
+        buttonDict.Add( eButton.b, b );
+        buttonDict.Add( eButton.start, start );
+        buttonDict.Add( eButton.select, select );
     }
 
-    //public struct RockyCharacterInputs {
+    // LateUpdate is called once per frame after all Updates have completed
+    void LateUpdate() {
+        buttons =
+            $"U:{up.Char} D:{down.Char} L:{left.Char} R:{right.Char} B:{b.Char} A:{a.Char} Se:{select.Char} St:{start.Char}";
+        if ( DEBUG_EVERY_FRAME ) Debug.Log( buttons );
+        // Progress all ButtonStates
+        foreach ( ButtonState bs in buttonDict.Values ) {
+            bs.Progress();
+        }
+        //up.Progress();
+        //down.Progress();
+        //left.Progress();
+        //right.Progress();
+        //a.Progress();
+        //b.Progress();
+        //start.Progress();
+        //select.Progress();
+
+        // Manage easing on move, h, and v values
+        move = AxisEasing( move, moveRaw, Time.deltaTime );
+        // Expose in Inspector
+        moveX[0] = move.x;
+        moveX[1] = moveRaw.x;
+        moveY[0] = move.y;
+        moveY[1] = moveRaw.y;
+        if ( DEBUG ) Debug.Log( $"move: {move}" );
+
+
+        rightStick = AxisEasing( rightStick, rightStickRaw, Time.deltaTime );
+        // Expose in Inspector
+        rightStickX[0] = rightStick.x;
+        rightStickX[1] = rightStickRaw.x;
+        rightStickY[0] = rightStick.y;
+        rightStickY[1] = rightStickRaw.y;
+
+        if ( DEBUG ) Debug.Log( $"rightStick: {rightStick}" );
+    }
+
+
+    public float AxisEasing( float curr, float target, float deltaTime ) {
+        // If target is on opposite side of 0 from curr, snap to 0
+        if ( target != 0 && curr != 0 ) {
+            if ( Mathf.Sign( target ) != Mathf.Sign( curr ) ) {
+                return 0;
+            }
+        }
+        if ( useGravityAndSensitivity ) {
+            float maxDelta;
+            if ( Mathf.Abs( curr ) < Mathf.Abs( target ) ) {
+                // target is further from 0 than curr, so use sensitivity
+                maxDelta = sensitivity * deltaTime;
+            } else {
+                // target is closer to 0 than curr, so use gravity
+                maxDelta = gravity * deltaTime;
+            }
+            return (Mathf.Abs( target - curr ) <= maxDelta) ? target : curr + Mathf.Sign( target - curr ) * maxDelta;
+        }
+        return target;
+    }
+
+    public Vector2 AxisEasing( Vector2 curr, Vector2 target, float deltaTime ) {
+        curr.x = AxisEasing( curr.x, target.x, deltaTime );
+        curr.y = AxisEasing( curr.y, target.y, deltaTime );
+        return curr;
+    }
+
+
+#region Static Methods
+    static public bool GetButton( eButton eB ) {
+        return _S.buttonDict[eB];
+    }
+
+    static public bool GetButtonDown( eButton eB ) {
+        return _S.buttonDict[eB].down;
+    }
+
+    static public bool GetButtonUp( eButton eB ) {
+        return _S.buttonDict[eB].up;
+    }
+
+    static public float GetAxisRaw( eAxis axis ) {
+        if ( axis == eAxis.horizontal ) return _S.hRaw;
+        if ( axis == eAxis.vertical ) return _S.vRaw;
+        if ( axis == eAxis.rightStickH ) return _S.rsHRaw;
+        if ( axis == eAxis.rightStickV ) return _S.rsVRaw;
+        return 0;
+    }
+
+    static public float GetAxis( eAxis axis ) {
+        if ( axis == eAxis.horizontal ) return _S.h;
+        if ( axis == eAxis.vertical ) return _S.v;
+        if ( axis == eAxis.rightStickH ) return _S.rsH;
+        if ( axis == eAxis.rightStickV ) return _S.rsV;
+        return 0;
+    }
+#endregion
+
+
+#region PlayerInput Functions
+
+    private void OnMove( InputValue value ) {
+        Vector2 moveOld = move;
+        moveRaw = value.Get<Vector2>();
+        if ( moveRaw.magnitude < deadZone ) moveRaw = Vector2.zero;
+        if ( DEBUG ) Debug.Log( $"moveRaw: {moveRaw}" );
+    }
+
+    private void OnRightStick( InputValue value ) {
+        Vector2 rsOld = rightStick;
+        rightStickRaw = value.Get<Vector2>();
+        if ( rightStickRaw.magnitude < deadZone ) rightStickRaw = Vector2.zero;
+        if ( DEBUG ) Debug.Log( $"rightStickRaw: {rightStickRaw}" );
+    }
+
+    private void OnUp( InputValue value ) {
+        up.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"up: {up}" );
+        //float f = value.Get<float>();
+        //if ( f > 0.5f ) up = true;
+    }
+
+    private void OnDown( InputValue value ) {
+        down.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"down: {down}" );
+    }
+
+    private void OnLeft( InputValue value ) {
+        left.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"left: {left}" );
+    }
+
+    private void OnRight( InputValue value ) {
+        right.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"right: {right}" );
+    }
+
+    private void OnA( InputValue value ) {
+        a.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"a: {a}" );
+    }
+
+    private void OnB( InputValue value ) {
+        b.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"b: {b}" );
+    }
+
+    private void OnStart( InputValue value ) {
+        start.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"start: {start}" );
+    }
+
+    private void OnSelect( InputValue value ) {
+        select.Set( value.isPressed );
+        if ( DEBUG ) Debug.Log( $"select: {select}" );
+    }
+
+#endregion
+}
+
+//public struct RockyCharacterInputs {
     //    public float MoveAxisForward;
     //    public float MoveAxisRight;
     //    public Quaternion CameraRotation;
@@ -254,7 +274,7 @@ namespace XnTools {
     //    }
     //}
 
-}
+
 
 #region XnPut2 Archive - This stores some code to pull InputActions from the PlayerInput class, but I'm not using it. - JGB 2025-02-10
 

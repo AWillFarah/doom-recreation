@@ -5,9 +5,9 @@ using NaughtyAttributes;
 using UnityEngine;
 using XnTools;
 
-[RequireComponent(typeof(Grounder))]
+[RequireComponent(typeof(PCC_Grounder))]
 [RequireComponent(typeof(Rigidbody2D))]
-public class Player : MonoBehaviour {
+public class PCC_Player : MonoBehaviour {
     [Header("Inscribed")]
     public float speed   = 10;
     [OnValueChanged("SetJumpVars")]
@@ -27,12 +27,12 @@ public class Player : MonoBehaviour {
     private float baseGrav; 
 
     protected Rigidbody2D r2d;
-    protected Grounder    grounder;
+    protected PCC_Grounder    grounder;
     
     // Start is called before the first frame update
     void Start() {
         r2d = GetComponent<Rigidbody2D>();
-        grounder = GetComponent<Grounder>();
+        grounder = GetComponent<PCC_Grounder>();
         baseGrav = Physics2D.gravity.y;
     }
 

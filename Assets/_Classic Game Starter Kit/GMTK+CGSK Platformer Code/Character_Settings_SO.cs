@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using NaughtyAttributes;
+using NaughtyAttributes;  // https://github.com/dbrizov/NaughtyAttributes
 using UnityEngine.Timeline;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,7 +18,7 @@ public class Character_Settings_SO : ScriptableObject {
     static bool DEBUG_JUMP_LINE_CALCULATION = false;
 
     
-    [Header( "Movement Stats" )]
+    [Header( "\n_____ Movement Stats & Options _____" )]
     [SerializeField, Range( 0f, 20f )]
     [Tooltip( "Maximum movement speed (m/s)" )]
     public float maxSpeed = 10f;
@@ -43,8 +43,6 @@ public class Character_Settings_SO : ScriptableObject {
     // [SerializeField]
     // [Tooltip( "Friction to apply against movement on stick" )]
     // public float friction = 0;
-
-    [Header( "Movement Options" )]
     [Tooltip( "When false, the character will skip acceleration and deceleration and instantly move and stop" )]
     public bool useAcceleration = true;
 
@@ -54,9 +52,9 @@ public class Character_Settings_SO : ScriptableObject {
     // https://www.youtube.com/watch?v=hG9SzQxaCm8&t=9m35s & https://www.youtube.com/watch?v=hG9SzQxaCm8&t=784s
     // Th = Xh/Vx     V0 = 2H / Th     G = -2H / (Th * Th)     V0 = 2HVx / Xh     G = -2H(Vx*Vx) / (Xh*Xh) 
 
-    [Header( "Jump Settings" )]
-    public eJumpSettingsType jumpSettingsType = eJumpSettingsType.CGSK_Time;
-    public enum eJumpSettingsType { CGSK_Distance, CGSK_Time, GMTK_GameMakersToolKit };
+    [Header( "\n\n_____ Jump Settings _____" )]
+    public eJumpSettingsType jumpSettingsType = eJumpSettingsType.CGSK_Height_and_Distance;
+    public enum eJumpSettingsType { CGSK_Height_and_Distance, CGSK_Time_DEPRECATED, GMTK_GameMakersToolKit_DEPRECATED };
 
     public bool showJumpLine = true;
 
@@ -64,24 +62,29 @@ public class Character_Settings_SO : ScriptableObject {
     [Range( 1f, 10f )]
     public float jumpHeight = 4f;
 
-    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Time )]
+    [Label( " ––– Classic Game Starter Kit - Time-Based Jump Settings - DEPRECATED ––– " )]
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Time_DEPRECATED )]
     public CGSK_JumpSettings_Time jumpSettingsTime;
 
-    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Distance )]
-    public CGSK_JumpSettings_Distance jumpSettingsDistance;
-
-    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    [Label( " ––– Classic Game Starter Kit - Variable Jump Height Settings ––– " )]
+    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     public CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeightCGSK;
-    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    
+    [Label( " ––– GameMakers ToolKit - Jump Settings - DEPRECATED ––– " )]
+    [ShowIf("jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     public CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeightGMTK;
     [HideInInspector] internal CGSK_JumpSettings_VariableHeight jumpSettingsVariableHeight;
 
-    // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    [Label( " ––– Classic Game Starter Kit - Jump Distance Settings –––" )]
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.CGSK_Height_and_Distance )]
+    public CGSK_JumpSettings_Distance jumpSettingsDistance;
+
+    // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [XnTools.ReadOnly][BoxGroup("CGSK Derived Jump Properties")]
     // public float jumpDistUp, jumpDurationUp, jumpVelUp, jumpGravUp, jumpDistDown, jumpDurationDown, jumpVelDown, jumpGravDown;
 
 
-    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     [BoxGroup( "Derived Jump Properties" )]
     public CSSO_FloatUpDown jumpDist, jumpDuration, jumpVel, jumpGrav;
     [BoxGroup( "Derived Jump Properties" )] [SerializeField] [XnTools.ReadOnly]
@@ -89,7 +92,7 @@ public class Character_Settings_SO : ScriptableObject {
 
 
 
-    [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     public GMTK_JumpSettings jumpSettingsGMTK;
 
 
@@ -108,13 +111,13 @@ public class Character_Settings_SO : ScriptableObject {
     public int jumpsBetweenGrounding = 1;
 
 
-    [Header("CapsuleCollider and Grounding Settings")]
+    [Header("\n\n_____ CapsuleCollider and Grounding Settings _____")]
     public CGSK_ColliderSettings colliderSettings;
     // TODO: Actually make these settings affect the CapsuleCollider2D
 
 
 
-    [Header( "Juice Settings - Squash and Stretch (currently unused)" )]
+    [Header( "\n\n_____ Juice Settings - Squash and Stretch (currently unused) _____" )]
     [XnTools.Hidden]
     public bool squashAndStretch;
     [XnTools.Hidden, Tooltip( "Width Squeeze, Height Squeeze, Duration" )]
@@ -128,8 +131,7 @@ public class Character_Settings_SO : ScriptableObject {
     [XnTools.Hidden]
     public float landDrop = 1;
 
-    [Header("Juice Settings - Tilting (currently unused)")]
-
+    [Header("_____ Juice Settings - Tilting (currently unused) _____")]
     [XnTools.Hidden]
     public bool leanForward;
     [XnTools.Hidden, Tooltip( "How far should the character tilt?" )]
@@ -140,22 +142,22 @@ public class Character_Settings_SO : ScriptableObject {
 
 
     // public float timeToJumpApex;
-    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [SerializeField, Range( 0f, 5f )]
     // [Tooltip( "Gravity multiplier to apply when going up" )]
     // public float upwardMovementMultiplier = 1f;
-    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [SerializeField, Range( 1f, 10f )]
     // [Tooltip( "Gravity multiplier to apply when coming down" )]
     // public float downwardMovementMultiplier = 6.17f;
-    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [SerializeField, Range( 0, 1 )]
     // [Tooltip( "How many times can you jump in the air?" )]
     // public int maxAirJumps = 0;
-    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [Tooltip( "Should the character drop when you let go of jump?" )]
     // public bool variableJumpHeight;
-    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [ShowIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     // [SerializeField, Range( 1f, 10f )]
     // [Tooltip( "Gravity multiplier when you let go of jump" )]
     // public float jumpCutOff;
@@ -165,15 +167,15 @@ public class Character_Settings_SO : ScriptableObject {
 
     private void OnValidate() {
         switch ( jumpSettingsType ) {
-        case eJumpSettingsType.CGSK_Time:
+        case eJumpSettingsType.CGSK_Time_DEPRECATED:
             CalculateDerivedJumpValues_Time();
             break;
 
-        case eJumpSettingsType.CGSK_Distance:
+        case eJumpSettingsType.CGSK_Height_and_Distance:
             CalculateDerivedJumpValues_Distance();
             break;
 
-        case eJumpSettingsType.GMTK_GameMakersToolKit:
+        case eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED:
             CalculateDerivedJumpValues_GMTK();
             break;
         }
@@ -185,12 +187,12 @@ public class Character_Settings_SO : ScriptableObject {
     static private int       jumpLineResolution = 64; // NOTE: This must be a positive even number
     internal       Vector3[] jumpLinePoints;
     internal List<Vector3> minJumpLinePoints;
-    // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit )]
+    // [HideIf( "jumpSettingsType", eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED )]
     internal Vector3[] jumpStartMidEndPoints, minJumpStartMidEndPoints;
     internal Vector2   minTimeApexFull;
 
     internal void CalculateJumpLine() {
-        if ( jumpSettingsType == eJumpSettingsType.GMTK_GameMakersToolKit ) {
+        if ( jumpSettingsType == eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED ) {
             jumpLinePoints = null;
             return;
         }
@@ -327,7 +329,7 @@ public class Character_Settings_SO : ScriptableObject {
 
     [System.Serializable]
     public class CGSK_JumpSettings_Time {
-        [Header( "Classic Game Starter Kit - Time Jump Settings" )]
+        // [Header( "Classic Game Starter Kit - Time Jump Settings" )]
         [Tooltip( "The full duration of the shortest jump possible (by tapping the button)" )]
         public float fullJumpDurationMin = 0.5f;
         [Tooltip( "The full duration of the longest jump possible (by holding the button)" )]
@@ -354,7 +356,7 @@ public class Character_Settings_SO : ScriptableObject {
 
     [System.Serializable]
     public class CGSK_JumpSettings_Distance {
-        [Header( "Classic Game Starter Kit - Distance Jump Settings" )]
+        // [Header( "Classic Game Starter Kit - Distance Jump Settings" )]
         [Tooltip( "The horizontal distance at full run speed of the shortest jump possible (by tapping the button)" )]
         public float fullJumpDistanceMin = 0.5f;
         [Tooltip( "The horizontal distance at full run speed of the longest jump possible (by holding the button)" )]
@@ -384,7 +386,7 @@ public class Character_Settings_SO : ScriptableObject {
 
     [System.Serializable]
     public class CGSK_JumpSettings_VariableHeight {
-        [Header( "Classic Game Starter Kit - Variable Jump Height" )]
+        // [Header( "Classic Game Starter Kit - Variable Jump Height" )]
 
         [Tooltip("Should the character jump differently based on how long the jump button is held?")]
         public bool useVariableJumpHeight = true;
@@ -408,7 +410,7 @@ public class Character_Settings_SO : ScriptableObject {
     
     [System.Serializable]
     public class GMTK_JumpSettings {
-        [Header( "Jump Settings - GameMakers ToolKit" )]
+        // [Header( "Jump Settings - GameMakers ToolKit" )]
         [SerializeField, Range( 1f, 10f )]
         [Tooltip( "This number is converted from the rather meaningless [1..10] to a time to jump apex of [0.2sec..1.25sec]" )]
         public float jumpDuration = 5;

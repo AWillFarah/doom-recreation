@@ -712,6 +712,17 @@
                     "action": "RightStick",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "b3d084c5-92da-4300-b9b2-9e8e87178cb0",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "RightStick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

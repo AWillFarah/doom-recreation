@@ -30,32 +30,44 @@ MonoBehaviour:
   - heading: <b>Contents of this Starter Kit</b>
     text: "Most things can be found in the <b><i>_Classic Game Starter Kit</i></b>
       folder. Read the <b>Instructions Doc</b> (linked above) for much better info
-      on each of these. \n\n\u2022 <b>__Scripts</b> folder:\n    \u2022 <b>BoundsCamera.cs</b>
-      - A camera that follows the player within bounds that are defined by BoxCollider2D
-      triggers.\n\n\u2022 <b>Importing a Classic Level</b> - Contains the tools for
-      converting an image of a map from somewhere like spriters-resource.com into
-      a working Unity Tilemap, which can save a ton of space in the final build of
-      your game and make editing the level much easier.\n\n\u2022 <b>Xnput</b> -
-      Once it has been drug into a scene, the <b>Xnput Prefab</b> uses the new Unity
-      Input System and NES_InputActions to generate data for NES-style controls from
-      a keyboard or gamepad. It is accessed statically just like Input (e.g., Xnput.GetButtonDown(\"Start\")).
-      If you select the prefab, you can see the various buttons working when the
-      scene is played.\n\n\u2022 <b>MetroidCamera.cs</b> - TBD - This camera script
-      uses a series of BoxColliders to ensure the camera follows the player through
-      the level.\n\n\u2022 <b>Classic Character Controller</b> - TBD - This is a
-      simple but effective 2D character controller that is a good starting point
-      for developing your own player character controller."
+      on each of these. \n\n\u2022 <b>BoundsCamera.cs</b> - A camera that follows
+      the player within bounds that are defined by BoxCollider2D triggers (in __Scripts
+      folder).\n\n\u2022\_<b>_Prefabs Folder</b>\n  \u2022 <b>Player2D Prefab</b>
+      - A player GameObject that uses the GMTK + CGSK Platformer Code\n  \u2022 <b>Stairs
+      Prefab</b> - A set of invisible stairs (or ladder) that can be climbed by Player\n 
+      \u2022 <b>Xnput Prefab</b> - Once it has been drug into a scene, the <b>Xnput
+      Prefab</b> uses the new Unity Input System and NES_InputActions to generate
+      data for NES-style controls from a keyboard or gamepad. It is accessed statically
+      just like Unity's built-in Input (e.g., Xnput.GetButtonDown(\"Start\")). If
+      you select the prefab, you can see the various buttons working when the scene
+      is played.\n\n\u2022 <b>Alternate Character Controllers</b> - Several simpler
+      character controllers with fewer features\n  \u2022 <b>CharacterController2D</b>
+      - This is a simple but effective 2D character controller that is a good starting
+      point for developing your own player character controller. It has fewer features
+      than the GMTK + CGSK one.\n  \u2022 <b>First Person Controller</b> Folder -
+      A first-person controller prefab and demo scene.\n  \u2022 <b>PCC_Grounder</b>
+      - The Grounder script from the 2D Platformer Coding Challenge in Spring 2025.\n 
+      \u2022 <b>PCC_Player</b> - The Player script from the 2D Platformer Coding
+      Challenge in Spring 2025.\n\n\u2022 <b>GMTK + CGSK Platformer Code</b> - This
+      is a relatively complex 2D character controller that was initially created
+      by GameMakers ToolKit but fixed and heavily modified by Jeremy.\n\n\u2022 <b>Importing
+      a Classic Level</b> - Contains the tools for converting an image of a map from
+      somewhere like spriters-resource.com into a working Unity Tilemap, which can
+      save a ton of space in the final build of your game and make editing the level
+      much easier.\n"
     linkText: '   More information is available in the Instructions Doc'
     url: https://docs.google.com/document/d/1MME9SmiOWbESyZiEHRC7WudysBDrGfxm5lMhPg_3e0o/edit?usp=sharing
-  - heading: Importing a Classic Level Tilemap Code
-    text: This is mostly built on code from the Dungeon Delver project in my book.
-    linkText: '   For more info on the book, see <b>http://book.prototools.net</b>'
-    url: http://book.prototools.net
-  - heading: Character Controller Code
+  - heading: Character Controller 2D
     text: The character platformer code is a modified version of the GMTK Platformer
-      Toolkit.
+      Toolkit. A few <b>Alternate Character Controllers</b> are also included in
+      the _CGSK folder.
     linkText: '   For more info, watch this GMTK video'
     url: https://www.youtube.com/watch?v=zWi0jgghGcI
+  - heading: Importing a Classic Level Tilemap Code
+    text: This is mostly built on code from the Dungeon Delver project in my book.
+      Extensive instructions for using this are in the Instructions Google Doc.
+    linkText: '   <b>https://tinyurl.com/mi231-classic-game</b>'
+    url: https://tinyurl.com/mi231-classic-game
   - heading: NaughtyAttributes - Unity Asset
     text: This project includes the <b>excellent</b> and <b>free</b> NaughtyAttributes
       asset from the Unity Asset Store. NaughtyAttributes was created by Denis Rizov
@@ -78,7 +90,7 @@ MonoBehaviour:
       that some things could have been done better. When I contacted GMTK about it,
       they said that they had moved on to other projects and weren't interested in
       improving their Toolkit, so I felt that I needed to make my own.\n\nDoing so,
-      is taking some time, as all things do. \u2014 <i>Jeremy</i>"
+      is taking some time, as all things do.\n     \u2014 <i>Jeremy</i>"
     linkText: 
     url: 
   showDefaultInspector: 0

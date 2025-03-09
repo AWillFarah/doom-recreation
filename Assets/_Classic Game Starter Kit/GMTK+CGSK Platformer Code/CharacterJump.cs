@@ -278,7 +278,7 @@ timeToApexStat = scale(1, 10, 0.2f, 2.5f, numberFromPlatformerToolkit)
             if ( cMove.characterSettingsSO == null ) return;
             Character_Settings_SO csso = cMove.characterSettingsSO;
             if ( !csso.showJumpLine ) return;
-            if ( csso.jumpSettingsType == Character_Settings_SO.eJumpSettingsType.GMTK_GameMakersToolKit ) return;
+            if ( csso.jumpSettingsType == Character_Settings_SO.eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED ) return;
             if (csso.jumpLinePoints == null) cMove.characterSettingsSO.CalculateJumpLine();
 
             GUIStyle labelStyle = new GUIStyle( EditorStyles.foldoutHeader );

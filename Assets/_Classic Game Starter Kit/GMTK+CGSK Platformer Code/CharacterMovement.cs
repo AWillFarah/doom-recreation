@@ -210,7 +210,7 @@ public class CharacterMovement_Editor : Editor {
         // Ground raycasts are drawn by the CharacterGround script
 
         // if ( !csso.showJumpLine ) return;
-        // if ( csso.jumpSettingsType == Character_Settings_SO.eJumpSettingsType.GMTK_GameMakersToolKit ) return;
+        // if ( csso.jumpSettingsType == Character_Settings_SO.eJumpSettingsType.GMTK_GameMakersToolKit_DEPRECATED ) return;
         // if ( csso.jumpLinePoints   == null ) cMove.characterSettingsSO.CalculateJumpLine();
         //
         // GUIStyle labelStyle = new GUIStyle( EditorStyles.foldoutHeader );
