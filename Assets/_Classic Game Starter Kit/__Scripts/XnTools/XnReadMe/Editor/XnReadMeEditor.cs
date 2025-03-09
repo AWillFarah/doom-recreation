@@ -52,7 +52,7 @@ namespace XnTools {
 			method?.Invoke( null, new object[] { Path.Combine( Application.dataPath, UnityWindowLayoutPath ), false } );
 		}
 
-		[MenuItem( ProjectMenuHeader + "Show Project ReadMe", false, 1 )]
+		[MenuItem( ProjectMenuHeader + "Show Editable Project ReadMe", false, 1 )]
 		static XnReadMe_SO SelectProjectInfo() {
 			var ids = AssetDatabase.FindAssets( "t:XnReadMe_SO" );
 			if ( ids.Length == 1 ) {
@@ -132,6 +132,7 @@ namespace XnTools {
 		public override void OnInspectorGUI() {
 			var pInfo = (XnReadMe_SO) target;
 			Init();
+			
 			// Start a code block to check for GUI changes
 			EditorGUI.BeginChangeCheck();
 

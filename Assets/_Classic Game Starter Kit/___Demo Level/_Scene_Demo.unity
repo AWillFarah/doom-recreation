@@ -64777,6 +64777,13 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 810803037116765581, guid: 0730cc2c09a63450eb54ae47ab48773c, type: 3}
+      propertyPath: text
+      value: "This is the more complex version of the character controller that was
+        based on my fixes to the GMTK (Game Makers Tool Kit) code.\n\nFor a simpler
+        version, look at the Player.cs script in the <b>2025.1 Plaformer Coding Challenge</b>
+        that we did earlier this semester.\n\n         \u2013 Jeremy\n"
+      objectReference: {fileID: 0}
     - target: {fileID: 810803037116765584, guid: 0730cc2c09a63450eb54ae47ab48773c, type: 3}
       propertyPath: m_RootOrder
       value: 4

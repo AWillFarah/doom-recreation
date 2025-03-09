@@ -41,7 +41,7 @@ public class ProjectInfoEditor : Editor {
 	// 	method.Invoke( null, new object[] { Path.Combine( Application.dataPath, "TutorialInfo/Layout.wlt" ), false } );
 	// }
 
-	[MenuItem( ProjectMenuHeader+"/——— Show Project Info ———", false, 1 )]
+	[MenuItem( ProjectMenuHeader+"/——— Show CGSK Project Info ———", false, 1 )]
 	static ProjectInfo_SO SelectProjectInfo() {
 		var ids = AssetDatabase.FindAssets( "t:ProjectInfo_SO" );
 		if ( ids.Length == 1 ) {
@@ -94,6 +94,9 @@ public class ProjectInfoEditor : Editor {
 		var pInfo = (ProjectInfo_SO) target;
 		Init();
 		
+		// Start a code block to check for GUI changes
+		EditorGUI.BeginChangeCheck();
+		
 		bool altHeld = ( Event.current.modifiers == EventModifiers.Alt );
 		if ( pInfo.showDefaultInspector || altHeld ) {
 			pInfo.showDefaultInspector = EditorGUILayout.ToggleLeft( "Show Default Inspector…", pInfo.showDefaultInspector );
@@ -122,6 +125,11 @@ public class ProjectInfoEditor : Editor {
 			GUILayout.Space(10);
 			if (GUILayout.Button("Hide Default Inspector")) pInfo.showDefaultInspector = false;
 			DrawDefaultInspector();
+		}
+		
+		if ( EditorGUI.EndChangeCheck() ) {
+			EditorUtility.SetDirty( pInfo );
+			AssetDatabase.SaveAssets();
 		}
 	}
 

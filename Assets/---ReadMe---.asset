@@ -16,7 +16,7 @@ MonoBehaviour:
   iconMaxWidth: 128
   projectName: Classic Game Project
   author: Replace this with your name
-  modificationDate: 2024-09-25
+  modificationDate: 2025-03-09
   sections:
   - heading: 0. What is the link to your project on itch.io?
     text: <i>(Just paste the link here.)</i>
@@ -39,4 +39,4 @@ MonoBehaviour:
       credit if you tell us about why it's incomplete.)</i>
   - heading: 8. Is there anything else we should know?
     text: 
-  showReadMeEditor: 1
+  showReadMeEditor: 0

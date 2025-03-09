@@ -18,26 +18,33 @@ MonoBehaviour:
     Dev\n\u2013 games.MSU.edu \u2013"
   sections:
   - heading: <b>Instructions Document</b>
-    text: You can find a link to detailed instructions for using this starter kit
+    text: 'You can find a link to detailed instructions for using this starter kit
       at the following Google Doc. You cannot edit the document, but you can make
       comments if you would like me to clarify anything or add any information.
-    linkText: '   <b>Instructions:</b> https://tinyurl.com/mi231-classic-game'
+
+
+      <b>Please
+      refer to this Instructions Doc for the best CGSK info!</b> '
+    linkText: '   <b>https://tinyurl.com/mi231-classic-game</b>'
     url: https://tinyurl.com/mi231-classic-game
   - heading: <b>Contents of this Starter Kit</b>
     text: "Most things can be found in the <b><i>_Classic Game Starter Kit</i></b>
-      folder.\n\u2022 <b>Importing a Classic Level</b> - Contains the tools for converting
-      an image of a map from somewhere like spriters-resource.com into a working
-      Unity Tilemap, which can save a ton of space in the final build of your game
-      and make editing the level much easier.\n\u2022 <b>Xnput</b> - Once it has
-      been drug into a scene, the <b>Xnput Prefab</b> uses the new Unity Input System
-      and NES_InputActions to generate data for NES-style controls from a keyboard
-      or gamepad. It is accessed statically just like Input (e.g., Xnput.GetButtonDown(\"Start\")).
+      folder. Read the <b>Instructions Doc</b> (linked above) for much better info
+      on each of these. \n\n\u2022 <b>__Scripts</b> folder:\n    \u2022 <b>BoundsCamera.cs</b>
+      - A camera that follows the player within bounds that are defined by BoxCollider2D
+      triggers.\n\n\u2022 <b>Importing a Classic Level</b> - Contains the tools for
+      converting an image of a map from somewhere like spriters-resource.com into
+      a working Unity Tilemap, which can save a ton of space in the final build of
+      your game and make editing the level much easier.\n\n\u2022 <b>Xnput</b> -
+      Once it has been drug into a scene, the <b>Xnput Prefab</b> uses the new Unity
+      Input System and NES_InputActions to generate data for NES-style controls from
+      a keyboard or gamepad. It is accessed statically just like Input (e.g., Xnput.GetButtonDown(\"Start\")).
       If you select the prefab, you can see the various buttons working when the
-      scene is played.\n\u2022 <b>MetroidCamera.cs</b> - TBD - This camera script
+      scene is played.\n\n\u2022 <b>MetroidCamera.cs</b> - TBD - This camera script
       uses a series of BoxColliders to ensure the camera follows the player through
-      the level.\n\u2022 <b>Classic Character Controller</b> - TBD - This is a simple
-      but effective 2D character controller that is a good starting point for developing
-      your own player character controller."
+      the level.\n\n\u2022 <b>Classic Character Controller</b> - TBD - This is a
+      simple but effective 2D character controller that is a good starting point
+      for developing your own player character controller."
     linkText: '   More information is available in the Instructions Doc'
     url: https://docs.google.com/document/d/1MME9SmiOWbESyZiEHRC7WudysBDrGfxm5lMhPg_3e0o/edit?usp=sharing
   - heading: Importing a Classic Level Tilemap Code

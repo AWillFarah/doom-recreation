@@ -79,6 +79,11 @@
  
 
 
+# Classic Game Starter Kit (CGSK) Info
+
+From the **Help** menu, choose "**––– Show CGSK Project Info –––**" to learn a lot more about the CGSK. 
+
+
 
 # Unity Project Template
 
