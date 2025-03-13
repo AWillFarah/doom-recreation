@@ -16,7 +16,7 @@ MonoBehaviour:
   iconMaxWidth: 128
   projectName: Classic Game Project
   author: Replace this with your name
-  modificationDate: 2025-03-09
+  modificationDate: 2025-03-13
   sections:
   - heading: 0. What is the link to your project on itch.io?
     text: <i>(Just paste the link here.)</i>
@@ -33,10 +33,17 @@ MonoBehaviour:
     text: <i>(Including things like Chat-GPT, Copilot, etc. Tell us which .cs file
       to look in for the citation and describe what you learned)</i>
   - heading: 6. Did you get help from any online websites, videos, or tutorials?
-    text: <i>(link them here)</i>
+    text: '<i>
+
+      https://www.youtube.com/watch?v=zfUCf7_-dMs
+
+      I used this
+      channel for information on Doom mechanics https://www.youtube.com/@decino
+
+      </i>'
   - heading: 7. What trouble did you have with this project?
     text: <i>(Even if you didn't complete the project, you can still get partial
       credit if you tell us about why it's incomplete.)</i>
   - heading: 8. Is there anything else we should know?
     text: 
-  showReadMeEditor: 0
+  showReadMeEditor: 1

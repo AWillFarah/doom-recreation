@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using NaughtyAttributes;
 
@@ -10,6 +11,8 @@ using NaughtyAttributes;
 public class FirstPersonController : MonoBehaviour {
     [Header( "Inscribed" )]
     public float speed = 10;
+    public float acceleration = 13;
+    public float deceleration = 13;
     
     [OnValueChanged("SetJumpVars")]
     public float jumpHeight = 5;
@@ -76,9 +79,11 @@ public class FirstPersonController : MonoBehaviour {
 #endif
 
         // XY movement
-        Vector3 vel = transform.forward * v + transform.right * h;
+        Vector3 vel = (transform.forward * v + transform.right * h);
+        
         if ( vel.magnitude > 1 ) vel.Normalize();
         vel *= speed;
+        
         
         // Jump movement
         // NOTE: There is no Grounded check for this character, so you can just infinitely air jump
@@ -102,12 +107,13 @@ public class FirstPersonController : MonoBehaviour {
         transform.eulerAngles = rot;
         
         // Camera rotation (Pitch)
+        /*
         Vector3 rotCam = camTrans.eulerAngles;
         float rotX = rotCam.x + ( mY * pitchMult * Time.deltaTime * (invertPitch ? -1 : 1) );
         if ( rotX > 180 ) rotX = rotX - 360;
         rotX = Mathf.Clamp( rotX, pitchLimits.x, pitchLimits.y );
         rotCam = new Vector3( rotX, 0, 0 );
-        camTrans.localEulerAngles = rotCam;
+        camTrans.localEulerAngles = rotCam; */
         
     }
 

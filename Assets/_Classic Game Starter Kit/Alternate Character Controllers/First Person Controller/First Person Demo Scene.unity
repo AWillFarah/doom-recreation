@@ -130,9 +130,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpVel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpGrav
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpGravDown
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864214781094207588, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: weaponType
+      value: 
+      objectReference: {fileID: 11400000, guid: 368f4ade94d32a641b4efead1aa708ed, type: 2}
     - target: {fileID: 7239310803839692490, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
       propertyPath: m_Name
       value: FirstPerson Prefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8374060932289366839, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: m_Name
+      value: Pistol
       objectReference: {fileID: 0}
     - target: {fileID: 8656789067028074501, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
       propertyPath: m_LocalPosition.x
