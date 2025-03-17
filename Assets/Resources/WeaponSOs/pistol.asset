@@ -15,6 +15,7 @@ MonoBehaviour:
   weaponType: 1
   damageMin: 5
   damageMax: 15
+  rateOfFire: 0.4
   range: 2048
   ammoType: {fileID: 0}
   weaponSlot: 2

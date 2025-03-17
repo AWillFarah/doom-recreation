@@ -10,14 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f73ec71be5c59f44b5266444462f30b, type: 3}
-  m_Name: fist
+  m_Name: shotgun
   m_EditorClassIdentifier: 
-  weaponType: 0
-  damageMin: 2
-  damageMax: 20
-  rateOfFire: 0.48
-  range: 1
+  weaponType: 2
+  damageMin: 5
+  damageMax: 105
+  rateOfFire: 1.05
+  range: 2048
   ammoType: {fileID: 0}
-  weaponSlot: 1
+  weaponSlot: 3
   offsetMin: 0
   offsetMax: 5.6
+  numberOfShots: 7
