@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 2434844905276895600}
   m_Layer: 0
   m_Name: Capsule
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -213,7 +213,7 @@ GameObject:
   - component: {fileID: 5083874745385163849}
   m_Layer: 0
   m_Name: FirstPerson Prefab
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,8 +260,8 @@ MonoBehaviour:
   invertPitch: 1
   pitchLimits: {x: -60, y: 60}
   jumpVel: 0
-  jumpGrav: -10
-  jumpGravDown: -25
+  jumpGrav: -0
+  jumpGravDown: -0
   jumpRising: 0
 --- !u!54 &5083874745385163849
 Rigidbody:
