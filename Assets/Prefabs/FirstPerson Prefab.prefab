@@ -250,18 +250,18 @@ MonoBehaviour:
   speed: 10
   acceleration: 13
   deceleration: 13
-  jumpHeight: 5
+  jumpHeight: 0
   jumpDist: 10
   jumpApex: 0.6
   useVariableHeightJump: 1
   camTrans: {fileID: 8063064771306784589}
-  yawMult: 90
+  yawMult: 45
   pitchMult: 60
   invertPitch: 1
   pitchLimits: {x: -60, y: 60}
-  jumpVel: 16.666666
-  jumpGrav: -27.777779
-  jumpGravDown: -62.5
+  jumpVel: 0
+  jumpGrav: -10
+  jumpGravDown: -25
   jumpRising: 0
 --- !u!54 &5083874745385163849
 Rigidbody:
@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 6775646022242782998}
   - component: {fileID: 4864214781094207588}
   m_Layer: 0
-  m_Name: Arm Right
+  m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -408,4 +408,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53b03d11b1916f459be985832c5ddb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _type: 1
+  weaponType: {fileID: 11400000, guid: 368f4ade94d32a641b4efead1aa708ed, type: 2}
+  currentWeapon: 0

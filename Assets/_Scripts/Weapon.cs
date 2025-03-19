@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         
-        ChangeWeapon(eWeaponType.shotgun);
+        ChangeWeapon(eWeaponType.pistol);
     }
 
     void ChangeWeapon(eWeaponType weaponToSwitchTo)

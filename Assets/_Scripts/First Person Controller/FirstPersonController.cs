@@ -106,14 +106,13 @@ public class FirstPersonController : MonoBehaviour {
         rot.y += mX * yawMult * Time.deltaTime;
         transform.eulerAngles = rot;
         
-        // Camera rotation (Pitch)
-        /*
+        
         Vector3 rotCam = camTrans.eulerAngles;
         float rotX = rotCam.x + ( mY * pitchMult * Time.deltaTime * (invertPitch ? -1 : 1) );
         if ( rotX > 180 ) rotX = rotX - 360;
         rotX = Mathf.Clamp( rotX, pitchLimits.x, pitchLimits.y );
         rotCam = new Vector3( rotX, 0, 0 );
-        camTrans.localEulerAngles = rotCam; */
+        camTrans.localEulerAngles = rotCam; 
         
     }
 
@@ -132,11 +131,26 @@ public class FirstPersonController : MonoBehaviour {
     
 
     void SetJumpVars() {
+        /*
         float jumpDistHalf = jumpDist * jumpApex;
         jumpVel = 2 * jumpHeight * speed / jumpDistHalf;
         jumpGrav = -2 * jumpHeight * (speed * speed) / (jumpDistHalf * jumpDistHalf);
 
         float fallingDistHalf = jumpDist - jumpDistHalf;
         jumpGravDown = -2 * jumpHeight * (speed * speed) / (fallingDistHalf * fallingDistHalf);
+        */
+    }
+    
+    
+    // Door interaction
+    void OnTriggerStay(Collider other)
+    {
+        
+        if (other.tag == "Door" && Input.GetKey( KeyCode.Space ))
+        {
+            Door door = other.gameObject.GetComponent<Door>();
+            if(door.isOpened) return;
+            door.OpenDoor();
+        }
     }
 }
