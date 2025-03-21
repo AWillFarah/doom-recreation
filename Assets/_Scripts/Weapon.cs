@@ -16,7 +16,8 @@ public enum eWeaponType
 
 public class Weapon : MonoBehaviour
 {
-    
+    [Header("Inscribed")] 
+    public bool isPlayer;
     
     [Header("Dynamic")] 
     [Tooltip("Setting this manually while playing does not work properly")] public WeaponSO weaponType;
@@ -28,11 +29,10 @@ public class Weapon : MonoBehaviour
 
     void Start()
     {
-        
-        ChangeWeapon(eWeaponType.pistol);
+        if(isPlayer) ChangeWeapon(eWeaponType.pistol);
     }
 
-    void ChangeWeapon(eWeaponType weaponToSwitchTo)
+    public void ChangeWeapon(eWeaponType weaponToSwitchTo)
     {
         currentWeapon = weaponToSwitchTo;
         switch (weaponToSwitchTo)
@@ -53,36 +53,12 @@ public class Weapon : MonoBehaviour
     
     void Update()
     {
+        // Player only stuff
+        if(!isPlayer) return;
         // Firing
         if (Input.GetMouseButton(0))
         {
-            if(fireCooldown) return;
-            // Doom has a mechanic where the first shot will always be accurate
-            
-
-            for (int i = 0; i < weaponType.numberOfShots; i++)
-            {
-                if (reFired || weaponType.weaponType == eWeaponType.shotgun)
-                {
-                    float offset = Random.Range(-weaponType.offsetMax, weaponType.offsetMax);
-                    Quaternion forwardOffset = Quaternion.AngleAxis(offset, new Vector3(0, 1, 0));
-                    offsetVector = forwardOffset * transform.forward;  
-                
-                }
-                else offsetVector = transform.forward;
-                Physics.Raycast(transform.position, offsetVector, out RaycastHit hit, weaponType.range);
-                
-                //For debugging
-                Vector3 forward = offsetVector * weaponType.range;
-                Debug.DrawRay(transform.position, forward, Color.red, 1);  
-            }
-            
-            // Our first shot will always be accurate, however if we keep the mouse down our shots will be
-            // Innacurate
-            reFired = true;
-            if(!fireCooldown) fireCooldown = true;
-            Invoke("ShotRefresh", weaponType.rateOfFire);
-            
+           FireShot(); 
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -107,6 +83,35 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public void FireShot()
+    {
+        if(fireCooldown) return;
+        // Doom has a mechanic where the first shot will always be accurate
+            
+
+        for (int i = 0; i < weaponType.numberOfShots; i++)
+        {
+            if (reFired || weaponType.weaponType == eWeaponType.shotgun)
+            {
+                float offset = Random.Range(-weaponType.offsetMax, weaponType.offsetMax);
+                Quaternion forwardOffset = Quaternion.AngleAxis(offset, new Vector3(0, 1, 0));
+                offsetVector = forwardOffset * transform.forward;  
+                
+            }
+            else offsetVector = transform.forward;
+            Physics.Raycast(transform.position, offsetVector, out RaycastHit hit, weaponType.range);
+                
+            //For debugging
+            Vector3 forward = offsetVector * weaponType.range;
+            Debug.DrawRay(transform.position, forward, Color.red, 1);  
+        }
+            
+        // Our first shot will always be accurate, however if we keep the mouse down our shots will be
+        // Innacurate
+        reFired = true;
+        if(!fireCooldown) fireCooldown = true;
+        Invoke("ShotRefresh", weaponType.rateOfFire);
+    }
     void ShotRefresh()
     {
         fireCooldown = false;
