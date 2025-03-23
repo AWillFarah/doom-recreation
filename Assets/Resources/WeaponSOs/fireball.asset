@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f73ec71be5c59f44b5266444462f30b, type: 3}
-  m_Name: shotgun
+  m_Name: fireball
   m_EditorClassIdentifier: 
-  weaponType: 2
+  weaponType: 3
   damageMin: 5
-  damageMax: 105
-  rateOfFire: 1.05
+  damageMax: 24
+  rateOfFire: 2.5
   range: 2048
   ammoType: {fileID: 0}
-  weaponSlot: 3
+  weaponSlot: 11
   offsetMin: 0
-  offsetMax: 5.6
-  numberOfShots: 7
-  useProjectile: 0
-  projectilePrefab: {fileID: 0}
+  offsetMax: 0
+  numberOfShots: 0
+  useProjectile: 1
+  projectilePrefab: {fileID: 5693676214689375246, guid: 5c849877004e1f54d87dc28c2c39aedd, type: 3}
   projectileSpeed: 10

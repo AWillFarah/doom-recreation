@@ -2,6 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum eWeaponType
+{
+    none, // default or no weapon
+    pistol, 
+    shotgun, // multiple shots simultaneously
+    fireball, // For imp
+}
+
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon Stats")]
 public class WeaponSO : ScriptableObject
 {
@@ -16,4 +24,9 @@ public class WeaponSO : ScriptableObject
     public float offsetMin = 0f;
     public float offsetMax = 5.6f;
     public int numberOfShots = 1;
+    
+    [Header("Projectile Based Weapons")]
+    public bool useProjectile = false;
+    public GameObject projectilePrefab;
+    public float projectileSpeed = 10f;
 }

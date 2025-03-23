@@ -6,18 +6,13 @@ using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 
-public enum eWeaponType
-{
-    none, // default or no weapon
-    pistol, 
-    shotgun, // multiple shots simultaneously
-    
-}
+
 
 public class Weapon : MonoBehaviour
 {
     [Header("Inscribed")] 
     public bool isPlayer;
+    [SerializeField] private Transform weaponOrigin;
     
     [Header("Dynamic")] 
     [Tooltip("Setting this manually while playing does not work properly")] public WeaponSO weaponType;
@@ -30,6 +25,7 @@ public class Weapon : MonoBehaviour
     void Start()
     {
         if(isPlayer) ChangeWeapon(eWeaponType.pistol);
+        if(weaponOrigin == null) weaponOrigin = transform;
     }
 
     public void ChangeWeapon(eWeaponType weaponToSwitchTo)
@@ -45,6 +41,9 @@ public class Weapon : MonoBehaviour
                 break;
             case eWeaponType.shotgun:
                 weaponType = Resources.Load<WeaponSO>("WeaponSOs/shotgun"); 
+                break;
+            case eWeaponType.fireball:
+                weaponType = Resources.Load<WeaponSO>("WeaponSOs/fireball");
                 break;
         }
         // Calculating how our fireCooldown. We have the shots per second thanks to decinos video
@@ -81,29 +80,39 @@ public class Weapon : MonoBehaviour
         {
             ChangeWeapon(eWeaponType.shotgun);
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeWeapon(eWeaponType.fireball);
+        }
     }
 
     public void FireShot()
     {
         if(fireCooldown) return;
-        // Doom has a mechanic where the first shot will always be accurate
-            
 
+
+        if (weaponType.useProjectile)
+        {
+            GameObject projectileGO = Instantiate(weaponType.projectilePrefab, weaponOrigin.position, Quaternion.identity);
+            Rigidbody rb = projectileGO.GetComponent<Rigidbody>();
+            rb.velocity = weaponOrigin.forward * weaponType.projectileSpeed;
+        }
         for (int i = 0; i < weaponType.numberOfShots; i++)
         {
             if (reFired || weaponType.weaponType == eWeaponType.shotgun)
             {
                 float offset = Random.Range(-weaponType.offsetMax, weaponType.offsetMax);
                 Quaternion forwardOffset = Quaternion.AngleAxis(offset, new Vector3(0, 1, 0));
-                offsetVector = forwardOffset * transform.forward;  
+                offsetVector = forwardOffset * weaponOrigin.forward;  
                 
             }
-            else offsetVector = transform.forward;
-            Physics.Raycast(transform.position, offsetVector, out RaycastHit hit, weaponType.range);
+            else offsetVector = weaponOrigin.forward;
+            Physics.Raycast(weaponOrigin.position, offsetVector, out RaycastHit hit, weaponType.range);
                 
             //For debugging
             Vector3 forward = offsetVector * weaponType.range;
-            Debug.DrawRay(transform.position, forward, Color.red, 1);  
+            Debug.DrawRay(weaponOrigin.position, forward, Color.red, 1);  
         }
             
         // Our first shot will always be accurate, however if we keep the mouse down our shots will be

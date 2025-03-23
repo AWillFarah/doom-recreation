@@ -39,6 +39,9 @@ public class FirstPersonController : MonoBehaviour {
     public bool  jumpRising = false;
     
     private Rigidbody rigid;
+    
+    private Vector3 moveDirection;
+    private Vector3 velocity;
 
     void Start() {
         rigid = GetComponent<Rigidbody>();
@@ -79,19 +82,30 @@ public class FirstPersonController : MonoBehaviour {
 #endif
 
         // XY movement
-        Vector3 vel = (transform.forward * v + transform.right * h);
+        //Vector3 vel = (transform.forward * v + transform.right * h);
+        moveDirection = (transform.forward * v + transform.right * h).normalized;
+        // Acceleration
+        if (moveDirection.magnitude > 0)
+        {
+            velocity = Vector3.Lerp(velocity, moveDirection * speed, Time.deltaTime * acceleration);
+        }
+        // Deceleration
+        else
+        {
+            velocity = Vector3.Lerp(velocity, Vector3.zero, Time.deltaTime * deceleration);
+        }
         
-        if ( vel.magnitude > 1 ) vel.Normalize();
-        vel *= speed;
+        //if ( vel.magnitude > 1 ) vel.Normalize();
+        //vel *= speed;
         
         
         // Jump movement
         // NOTE: There is no Grounded check for this character, so you can just infinitely air jump
-        vel.y = rigid.velocity.y;
+        velocity.y = rigid.velocity.y;
         if ( jumpNow ) {
             // If jump was pressed this frame, set the vel.y and start rising jump
             jumpRising = true;
-            vel.y = jumpVel;
+            velocity.y = jumpVel;
         } else if ( !jumpHeld && useVariableHeightJump ) {
             // If the player is no longer holding the jump button, jumpRising = false
             //  This makes the variable-height jump work
@@ -99,7 +113,7 @@ public class FirstPersonController : MonoBehaviour {
         }
         
         // Assign back to Rigidbody
-        rigid.velocity = vel;
+        rigid.velocity = velocity;
 
         // Player rotation (Yaw)
         Vector3 rot = transform.eulerAngles;
@@ -125,7 +139,7 @@ public class FirstPersonController : MonoBehaviour {
             vel.y += jumpGravDown * Time.fixedDeltaTime;
         }
         if (vel.y < 0 ) jumpRising = false;
-        rigid.velocity = vel;
+        //rigid.velocity = vel;
     }
     
     
