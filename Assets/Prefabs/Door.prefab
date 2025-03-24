@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5901566720555999498}
   - component: {fileID: 3862104016188614765}
   - component: {fileID: 1663673608168092684}
+  - component: {fileID: 7187290956889914289}
   m_Layer: 0
   m_Name: DoorPhysical
   m_TagString: Door
@@ -140,7 +141,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4facdf902db47464f9375bfa83baf356, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOpened: 0
   doorCloseDelay: 3
+  doorAnimator: {fileID: 7187290956889914289}
+  doorOpen: {fileID: 7400000, guid: 20471465759289646a9ab4ebb6069152, type: 2}
+  doorClose: {fileID: 7400000, guid: c29584fdab0ef1c47ab10981d5bc95ab, type: 2}
+--- !u!95 &7187290956889914289
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6240949203671732228}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a43c92857371c69428fd8de85517c5e7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6495482348963708979
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,7 @@ public class FirstPersonController : MonoBehaviour {
     public float speed = 10;
     public float acceleration = 13;
     public float deceleration = 13;
+  
     
     [OnValueChanged("SetJumpVars")]
     public float jumpHeight = 5;
@@ -31,6 +32,8 @@ public class FirstPersonController : MonoBehaviour {
     public bool      invertPitch = true;
     public Vector2   pitchLimits = new Vector2( -60, 60 );
     
+    [SerializeField] Transform rayOrigin;
+    [SerializeField] private float rayDistance = 0.1f;
     
     [Header("Dynamic")]
     public float jumpVel;
@@ -51,11 +54,17 @@ public class FirstPersonController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.Locked;
         
         // We're not using Unity gravity because we're modifying it ourselves - JGB 2025-03-09
-        rigid.useGravity = false;
+        // rigid.useGravity = false;
     }
 
     // Update is called once per frame
     void Update() {
+        
+        
+    }
+
+    void FixedUpdate()
+    { 
         // NOTE: This is only really necessary when you're tuning the jump values.
         //   You can remove this call once you're happy with the jump values. - JGB 2025-03-09
 #if UNITY_EDITOR // Only run this in the Editor, in case you don't remove it.
@@ -95,22 +104,12 @@ public class FirstPersonController : MonoBehaviour {
             velocity = Vector3.Lerp(velocity, Vector3.zero, Time.deltaTime * deceleration);
         }
         
-        //if ( vel.magnitude > 1 ) vel.Normalize();
-        //vel *= speed;
-        
-        
-        // Jump movement
-        // NOTE: There is no Grounded check for this character, so you can just infinitely air jump
         velocity.y = rigid.velocity.y;
-        if ( jumpNow ) {
-            // If jump was pressed this frame, set the vel.y and start rising jump
-            jumpRising = true;
-            velocity.y = jumpVel;
-        } else if ( !jumpHeld && useVariableHeightJump ) {
-            // If the player is no longer holding the jump button, jumpRising = false
-            //  This makes the variable-height jump work
-            jumpRising = false;
-        }
+        
+        if(Physics.Raycast(rayOrigin.position, Vector3.down, out RaycastHit hit, rayDistance))
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+        } 
         
         // Assign back to Rigidbody
         rigid.velocity = velocity;
@@ -128,18 +127,9 @@ public class FirstPersonController : MonoBehaviour {
         rotCam = new Vector3( rotX, 0, 0 );
         camTrans.localEulerAngles = rotCam; 
         
-    }
-
-    void FixedUpdate() {
-        // Apply our own gravity, since we're adjusting it and NOT using standard Unity gravity
-        Vector3 vel = rigid.velocity;
-        if ( jumpRising ) {
-            vel.y += jumpGrav * Time.fixedDeltaTime;
-        } else {
-            vel.y += jumpGravDown * Time.fixedDeltaTime;
-        }
-        if (vel.y < 0 ) jumpRising = false;
-        //rigid.velocity = vel;
+        Vector3 down = Vector3.down * rayDistance;
+        Debug.DrawRay(rayOrigin.position, down, Color.green);
+       
     }
     
     

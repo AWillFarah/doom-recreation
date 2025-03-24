@@ -308,9 +308,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpVel
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpGrav
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3318551506049848182, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: jumpGravDown
+      value: -0
+      objectReference: {fileID: 0}
     - target: {fileID: 7239310803839692490, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
       propertyPath: m_Name
       value: 'FirstPerson Prefab '
+      objectReference: {fileID: 0}
+    - target: {fileID: 8063064771306784589, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.79999995
       objectReference: {fileID: 0}
     - target: {fileID: 8656789067028074501, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -352,7 +372,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6775646022242782998, guid: 038ff06cc58e241618dcf93d3f1528b9, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1411,6 +1432,10 @@ PrefabInstance:
     - target: {fileID: 1004249912003322251, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3106074756935286901, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: rangedWeapon
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5942869583958956933, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: objects.Array.data[0]

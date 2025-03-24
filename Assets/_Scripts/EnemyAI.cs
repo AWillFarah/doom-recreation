@@ -41,16 +41,19 @@ public class EnemyAI : MonoBehaviour
         // Actually chasing the player
         if (!hasTarget) return;
         thisAgent.destination = target.position;
-        transform.LookAt(target);
+        
         //transform.rotation = new Quaternion(0, transform.rotation.eulerAngles.y, 0, 0);
         
         // If we are already attacking ignore
         if(isAttacking) return;
-        if (thisAgent.remainingDistance <= (thisAgent.stoppingDistance + 1) && hasMeleeAttack)
+        float distance = Vector3.Distance (thisAgent.transform.position, target.position);
+        
+        if (distance <= (thisAgent.stoppingDistance + 1) && hasMeleeAttack)
         {
             weapon.ChangeWeapon(meleeWeapon);
             weapon.FireShot();
             Invoke("AttackRefresh", attackTime);
+            print("melee");
             isAttacking = true;
         }
         else
