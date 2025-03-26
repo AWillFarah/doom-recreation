@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponType: 2
   damageMin: 5
-  damageMax: 105
+  damageMax: 15
   rateOfFire: 1.05
   range: 2048
   ammoType: {fileID: 0}

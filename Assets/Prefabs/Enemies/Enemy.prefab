@@ -96,6 +96,7 @@ GameObject:
   - component: {fileID: 1807952804194957679}
   - component: {fileID: 3106074756935286901}
   - component: {fileID: 4918858011794440170}
+  - component: {fileID: -4748601799558730392}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -197,6 +198,19 @@ MonoBehaviour:
   weaponOrigin: {fileID: 0}
   weaponType: {fileID: 11400000, guid: ecbca8f5e59595f419f78d951d56a8b8, type: 2}
   currentWeapon: 1
+--- !u!114 &-4748601799558730392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6125464188873730500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75535134e5b7c0f47856b636b0001dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &8668433910839047095
 GameObject:
   m_ObjectHideFlags: 0

@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1776882943875451546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.437, z: 0.596}
+  m_LocalPosition: {x: 0, y: 0, z: 0.596}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 3318551506049848182}
   - component: {fileID: 5083874745385163849}
   - component: {fileID: 50592636940448468}
+  - component: {fileID: -3288361961914400444}
   m_Layer: 3
   m_Name: FirstPerson Prefab
   m_TagString: Untagged
@@ -175,7 +176,6 @@ MonoBehaviour:
   speed: 10
   acceleration: 7
   deceleration: 13
-  rayOrigin: {fileID: 0}
   jumpHeight: 5
   jumpDist: 12
   jumpApex: 0.6
@@ -185,6 +185,8 @@ MonoBehaviour:
   pitchMult: 60
   invertPitch: 1
   pitchLimits: {x: -60, y: 60}
+  rayOrigin: {fileID: 4116561653889164639}
+  rayDistance: 0.8
   jumpVel: 13.888888
   jumpGrav: -19.290121
   jumpGravDown: -43.402782
@@ -239,6 +241,19 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-3288361961914400444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7239310803839692490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75535134e5b7c0f47856b636b0001dc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
 --- !u!1 &8374060932289366839
 GameObject:
   m_ObjectHideFlags: 0

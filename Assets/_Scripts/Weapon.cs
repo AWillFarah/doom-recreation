@@ -1,4 +1,5 @@
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -109,7 +110,13 @@ public class Weapon : MonoBehaviour
             }
             else offsetVector = weaponOrigin.forward;
             Physics.Raycast(weaponOrigin.position, offsetVector, out RaycastHit hit, weaponType.range);
-                
+            
+            // Dealing Damage
+            if (hit.collider.GetComponent<Health>() != null)
+            {
+                float amount = Random.Range(weaponType.damageMin, weaponType.damageMax);
+                hit.collider.GetComponent<Health>().ChangeHealth((int)amount);
+            }
             //For debugging
             Vector3 forward = offsetVector * weaponType.range;
             Debug.DrawRay(weaponOrigin.position, forward, Color.red, 1);  
