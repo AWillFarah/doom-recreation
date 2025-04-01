@@ -55,7 +55,7 @@ public class LineOfSight : MonoBehaviour
             if (IsInSight(obj))
             {
                 objects.Add(obj);
-                enemyAI.PlayerDetected(obj.transform);
+                enemyAI.TargetDetected(obj.transform);
             }
         }
     }

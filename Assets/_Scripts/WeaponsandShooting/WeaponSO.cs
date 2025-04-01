@@ -24,6 +24,7 @@ public class WeaponSO : ScriptableObject
     public float offsetMin = 0f;
     public float offsetMax = 5.6f;
     public int numberOfShots = 1;
+    public int maxAmmo = 200;
     
     [Header("Projectile Based Weapons")]
     public bool useProjectile = false;

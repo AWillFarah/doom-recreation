@@ -21,17 +21,20 @@ MonoBehaviour:
   - heading: 0. What is the link to your project on itch.io?
     text: <i>(Just paste the link here.)</i>
   - heading: 1. What are the controls to your game? How do we play?
-    text: <i>(art, music, etc. Just tell us where you got it, link it here)</i>
+    text: 'WASD, Mouse to Shoot
+
+
+      Buttons 1,2,3 to switch weapons (FIst, Pistol,
+      Shotgun)'
   - heading: 2. What creative additions did you make? How can we find them?
-    text: <i>(If you don't tell us how to experience them, we could easily miss them.)</i>
+    text: 
   - heading: 3. Any assets used that you didn't create yourself?
-    text: <i>(art, music, etc. Just tell us where you got it, link it here)</i>
+    text: Doom E1M1 Fbx was found here https://lemon74.itch.io/doom-classic-level-1-e1-fbx-model
   - heading: 4. Did you receive help from anyone outside this class or from anyone
       in this class that is not in a group with you?
     text: <i>(list their names and what they helped with)</i>
   - heading: 5. Did you get help from any AI Code Assistants?
-    text: <i>(Including things like Chat-GPT, Copilot, etc. Tell us which .cs file
-      to look in for the citation and describe what you learned)</i>
+    text: None
   - heading: 6. Did you get help from any online websites, videos, or tutorials?
     text: '<i>
 
@@ -45,15 +48,21 @@ MonoBehaviour:
       LOS
       https://www.youtube.com/watch?v=znZXmmyBF-o
 
-      </i>
 
 
       Distance
 
-      https://discussions.unity.com/t/distance-between-two-objects/404478'
+      https://discussions.unity.com/t/distance-between-two-objects/404478
+
+
+      Changing
+      SO (for weapons)
+
+      https://discussions.unity.com/t/change-scriptableobject-at-runtime/817418
+
+      </i>'
   - heading: 7. What trouble did you have with this project?
-    text: <i>(Even if you didn't complete the project, you can still get partial
-      credit if you tell us about why it's incomplete.)</i>
+    text: Getting the Line of Sight was quite tricky
   - heading: 8. Is there anything else we should know?
     text: 
   showReadMeEditor: 1

@@ -92,6 +92,22 @@ PrefabInstance:
       propertyPath: rangedWeapon
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3610835367177766194, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3610835367177766194, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3610835367177766194, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3610835367177766194, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.598
+      objectReference: {fileID: 0}
     - target: {fileID: 4918858011794440170, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: offset.y
       value: 1
@@ -104,6 +120,10 @@ PrefabInstance:
       propertyPath: weaponOriginOffset.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5355414421117344956, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: meshColor.a
+      value: 0.42745098
+      objectReference: {fileID: 0}
     - target: {fileID: 6125464188873730500, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: m_Name
       value: Imp
@@ -112,6 +132,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: bec2c2a819d3f144ca4e984450abcde6, type: 2}
+    - target: {fileID: 6888289925753795621, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8091874947478999709, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
@@ -119,6 +143,10 @@ PrefabInstance:
     - target: {fileID: 8437310295401472792, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
       propertyPath: m_VersionIndex
       value: 512
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777472868448777360, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: currentWeapon
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

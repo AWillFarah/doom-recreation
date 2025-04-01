@@ -100,6 +100,14 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 4753e17aa56ca93458d840b38f10eb51, type: 2}
+    - target: {fileID: 6888289925753795621, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8777472868448777360, guid: 69a6642226d6f6d448a3ae2658196f16, type: 3}
+      propertyPath: bulletHole
+      value: 
+      objectReference: {fileID: 2030635750102455034, guid: 8b1f132e33f045e4891c5c41f1f9824b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

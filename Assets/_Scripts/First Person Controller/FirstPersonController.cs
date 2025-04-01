@@ -141,19 +141,23 @@ public class FirstPersonController : MonoBehaviour {
         
         velocity.y = rigid.velocity.y;
         
-        if(Physics.Raycast(rayOrigin.position, Vector3.down, out RaycastHit hit, rayDistance))
-        {
-            
-            transform.position = new Vector3(transform.position.x, transform.position.y + hit.distance + .1f, transform.position.z);
-        } 
+        
         
         // Assign back to Rigidbody
         rigid.velocity = velocity;
 
-      
+        // Moving up stairs/elevation
+        foreach (Transform child in rayOrigin)
+        {
+            if(Physics.Raycast(child.position, Vector3.down, out RaycastHit hit, rayDistance))
+            {
+                if(hit.collider.gameObject.layer == 4) return;
+                transform.position = new Vector3(transform.position.x, (transform.position.y + hit.distance + (hit.distance/4)), transform.position.z);
+            } 
+            Vector3 down = Vector3.down * rayDistance;
+            Debug.DrawRay(child.position, down, Color.green);  
+        }
         
-        Vector3 down = Vector3.down * rayDistance;
-        Debug.DrawRay(rayOrigin.position, down, Color.green);
        
     }
     

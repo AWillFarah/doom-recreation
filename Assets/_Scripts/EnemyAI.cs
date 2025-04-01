@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(Weapon))]
+
 public class EnemyAI : MonoBehaviour
 {
     [Header("Inscribed")] 
@@ -25,11 +25,12 @@ public class EnemyAI : MonoBehaviour
     void Start()
     {
         thisAgent = GetComponent<NavMeshAgent>();
-        weapon = GetComponent<Weapon>();
+        weapon = GetComponentInChildren<Weapon>();
     }
 
-    public void PlayerDetected(Transform targetPlayer)
+    public void TargetDetected(Transform targetPlayer)
     {
+        
         target = targetPlayer;
         hasTarget = true;
     }
@@ -39,15 +40,14 @@ public class EnemyAI : MonoBehaviour
     public void Update()
     {
         // Actually chasing the player
-        if (!hasTarget) return;
+        if (target == null) return;
         thisAgent.destination = target.position;
-        
-        //transform.rotation = new Quaternion(0, transform.rotation.eulerAngles.y, 0, 0);
         
         // If we are already attacking ignore
         if(isAttacking) return;
         float distance = Vector3.Distance (thisAgent.transform.position, target.position);
         
+        if(weapon.enabled == false) return;
         if (distance <= (thisAgent.stoppingDistance + 1) && hasMeleeAttack)
         {
             weapon.ChangeWeapon(meleeWeapon);
@@ -59,6 +59,7 @@ public class EnemyAI : MonoBehaviour
         else
         {
             weapon.ChangeWeapon(rangedWeapon);
+            weapon.transform.LookAt(target);
             weapon.FireShot();
             Invoke("AttackRefresh", attackTime);
             print("firing");
@@ -72,4 +73,6 @@ public class EnemyAI : MonoBehaviour
         isAttacking = false;
         print("refresh");
     }
+    
+    
 }
