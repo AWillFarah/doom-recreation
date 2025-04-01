@@ -196,6 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayer: 0
   weaponOrigin: {fileID: 0}
+  bulletHole: {fileID: 2030635750102455034, guid: 8b1f132e33f045e4891c5c41f1f9824b, type: 3}
   weaponType: {fileID: 11400000, guid: ecbca8f5e59595f419f78d951d56a8b8, type: 2}
   currentWeapon: 1
 --- !u!114 &-4748601799558730392
@@ -210,7 +211,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75535134e5b7c0f47856b636b0001dc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  maxHealth: 100
+  currentHealth: 0
 --- !u!1 &8668433910839047095
 GameObject:
   m_ObjectHideFlags: 0
