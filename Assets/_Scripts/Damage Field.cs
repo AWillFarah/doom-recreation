@@ -33,7 +33,7 @@ public class DamageField : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(isTouched) health.ChangeHealth(damage);  ;
+        if(isTouched) health.ChangeHealth(damage);
         
     }
     

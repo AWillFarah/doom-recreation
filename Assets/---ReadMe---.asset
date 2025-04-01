@@ -19,7 +19,7 @@ MonoBehaviour:
   modificationDate: 2025-03-13
   sections:
   - heading: 0. What is the link to your project on itch.io?
-    text: <i>(Just paste the link here.)</i>
+    text: https://willmsu.itch.io/doom-classic-game
   - heading: 1. What are the controls to your game? How do we play?
     text: 'WASD, Mouse to Shoot
 
@@ -64,5 +64,6 @@ MonoBehaviour:
   - heading: 7. What trouble did you have with this project?
     text: Getting the Line of Sight was quite tricky
   - heading: 8. Is there anything else we should know?
-    text: 
+    text: Please play in fullscreen. Player was set to 1920 x1080 but only seems
+      to work when in fullscreen
   showReadMeEditor: 1

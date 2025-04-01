@@ -28,7 +28,7 @@ public class Health : MonoBehaviour
         if (addHealth)
         {
             
-            if (!bonus)
+            if (!bonus && currentHealth < maxHealth)
             {
                 // If our maxHealth is above 0, we dont want to change anything
                 if(currentHealth >= maxHealth) return;
@@ -44,13 +44,13 @@ public class Health : MonoBehaviour
                 }
             }
 
-            else
+            else if(bonus)
             {
-                if (currentHealth >= (maxHealth * 2))
+                if (currentHealth + amount >= (maxHealth * 2))
                 {
                     currentHealth = (maxHealth * 2);
                 }
-                else
+                else 
                 {
                     currentHealth += amount;
                 }
@@ -60,7 +60,7 @@ public class Health : MonoBehaviour
         if (addArmor)
         {
             
-            if (!bonus)
+            if (!bonus && currentArmor < maxArmor)
             {
                 // If our maxHealth is above 0, we dont want to change anything
                 if(currentArmor >= maxArmor) return;
@@ -76,20 +76,20 @@ public class Health : MonoBehaviour
                 }
             }
 
-            else
+            else if(bonus)
             {
-                if (currentArmor >= (maxArmor * 2))
+                if (currentArmor + amount >= (maxArmor * 2))
                 {
                     currentArmor = (maxArmor * 2);
                 }
-                else
+                else 
                 {
                     currentArmor += amount;
                 }
             }
 
         }
-        else
+        else if(!addHealth && !addArmor)
         {
             if (currentArmor > 0)
             {

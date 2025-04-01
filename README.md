@@ -10,6 +10,103 @@
 **0. What is the link to your project on itch.io?**   
 
 > &nbsp;
+>https://willmsu.itch.io/doom-classic-game   
+> &nbsp;
+ 
+
+
+**1. What are the controls to your game? How do we play?**   
+
+> &nbsp;
+>WASD, Mouse to Shoot    
+>     
+> Buttons 1,2,3 to switch weapons (FIst, Pistol, Shotgun)   
+> &nbsp;
+ 
+
+
+**2. What creative additions did you make? How can we find them?**   
+
+> &nbsp;
+>*No answer given.*
+> &nbsp;
+ 
+
+
+**3. Any assets used that you didn't create yourself?**   
+
+> &nbsp;
+>Doom E1M1 Fbx was found here https://lemon74.itch.io/doom-classic-level-1-e1-fbx-model   
+> &nbsp;
+ 
+
+
+**4. Did you receive help from anyone outside this class or from anyone in this class that is not in a group with you?**   
+
+> &nbsp;
+><i>(list their names and what they helped with)</i>   
+> &nbsp;
+ 
+
+
+**5. Did you get help from any AI Code Assistants?**   
+
+> &nbsp;
+>None   
+> &nbsp;
+ 
+
+
+**6. Did you get help from any online websites, videos, or tutorials?**   
+
+> &nbsp;
+><i>    
+> https://www.youtube.com/watch?v=zfUCf7_-dMs    
+> I used this channel for information on Doom mechanics https://www.youtube.com/@decino    
+>     
+>     
+> LOS https://www.youtube.com/watch?v=znZXmmyBF-o    
+>     
+>     
+> Distance    
+> https://discussions.unity.com/t/distance-between-two-objects/404478    
+>     
+> Changing SO (for weapons)    
+> https://discussions.unity.com/t/change-scriptableobject-at-runtime/817418    
+> </i>   
+> &nbsp;
+ 
+
+
+**7. What trouble did you have with this project?**   
+
+> &nbsp;
+>Getting the Line of Sight was quite tricky   
+> &nbsp;
+ 
+
+
+**8. Is there anything else we should know?**   
+
+> &nbsp;
+>Please play in fullscreen. Player was set to 1920 x1080 but only seems to work when in fullscreen   
+> &nbsp;
+ 
+
+
+
+# **Classic Game Project** - ReadMe File
+
+#### Author: *Replace this with your name*
+
+##### Modified: *2025-03-13*
+
+
+<br>
+
+**0. What is the link to your project on itch.io?**   
+
+> &nbsp;
 ><i>(Just paste the link here.)</i>   
 > &nbsp;
  

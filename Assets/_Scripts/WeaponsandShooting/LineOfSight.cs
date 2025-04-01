@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditorInternal;
-using UnityEngine.UI;
+
 
 [ExecuteInEditMode]
 public class LineOfSight : MonoBehaviour
