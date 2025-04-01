@@ -16,7 +16,7 @@ MonoBehaviour:
   iconMaxWidth: 128
   projectName: Classic Game Project
   author: Replace this with your name
-  modificationDate: 2025-03-13
+  modificationDate: 2025-04-01
   sections:
   - heading: 0. What is the link to your project on itch.io?
     text: https://willmsu.itch.io/doom-classic-game
@@ -64,6 +64,5 @@ MonoBehaviour:
   - heading: 7. What trouble did you have with this project?
     text: Getting the Line of Sight was quite tricky
   - heading: 8. Is there anything else we should know?
-    text: Please play in fullscreen. Player was set to 1920 x1080 but only seems
-      to work when in fullscreen
+    text: 
   showReadMeEditor: 1
